@@ -1223,6 +1223,10 @@ void __fastcall TTotalForm::SetTrayID(AnsiString str_id)
 		m_sTempCurr[i] = IntToStr((i + 20)/20) + "-" + IntToStr((i % 20)+1);;
 		m_sTempVlot_Value[i] = 0;
 		m_sTempCurr_Value[i] = 0;
+
+        real_data.status[i] = 0;
+        real_data.volt[i] = "0";
+        real_data.curr[i] = "0";
 	}
 
 	pTrayid->Caption = tray.trayid;
