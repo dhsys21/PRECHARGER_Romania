@@ -7397,7 +7397,8 @@ object BaseForm: TBaseForm
     Width = 36
     Height = 26
     Cursor = crDefault
-    Caption.Text = 'BT1'
+    Hint = 'BT2202A 1'
+    Caption.Text = 'K1'
     Caption.Location = plCenterCenter
     Caption.HTMLFont.Charset = DEFAULT_CHARSET
     Caption.HTMLFont.Color = clWindowText
@@ -7436,7 +7437,8 @@ object BaseForm: TBaseForm
     Width = 36
     Height = 26
     Cursor = crDefault
-    Caption.Text = 'BT2'
+    Hint = 'BT2202A 2'
+    Caption.Text = 'K2'
     Caption.Location = plCenterCenter
     Caption.HTMLFont.Charset = DEFAULT_CHARSET
     Caption.HTMLFont.Color = clWindowText
@@ -7908,7 +7910,8 @@ object BaseForm: TBaseForm
     Width = 36
     Height = 26
     Cursor = crDefault
-    Caption.Text = 'BT1'
+    Hint = 'BT2202A 1'
+    Caption.Text = 'K1'
     Caption.Location = plCenterCenter
     Caption.HTMLFont.Charset = DEFAULT_CHARSET
     Caption.HTMLFont.Color = clWindowText
@@ -7947,7 +7950,8 @@ object BaseForm: TBaseForm
     Width = 36
     Height = 26
     Cursor = crDefault
-    Caption.Text = 'BT2'
+    Hint = 'BT2202A 2'
+    Caption.Text = 'K2'
     Caption.Location = plCenterCenter
     Caption.HTMLFont.Charset = DEFAULT_CHARSET
     Caption.HTMLFont.Color = clWindowText
