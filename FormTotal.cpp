@@ -90,7 +90,9 @@ void __fastcall TTotalForm::InitTrayStruct()
 	this->WriteRemeasureInfo();
 	memset(&tray, 0, sizeof(tray));
     memset(&real_data, 0, sizeof(real_data));
-    memset(&charge, 0, sizeof(config));
+    //* 2025 12 02 주석처리
+    //* charge 값이 초기화 되어 no setting values 에러 발생
+    //memset(&charge, 0, sizeof(config));
 
 	for(int i=0; i<MAXCHANNEL; ++i){
 		tray.cell[i] = 0;	//CELL INFO
@@ -418,6 +420,19 @@ bool __fastcall TTotalForm::ErrorCheck()
         Panel_State->Caption = "";
 		if(stage.alarm_status == nNoAnswer)
         	DisplayStatus(nVacancy);
+    }
+
+    if(Mod_PLC->GetPlcValue(this->Tag, PLC_D_PRE_TRAY_IN) == 0
+    	&& (stage.status == WDT || stage.status == REC)){
+        Panel_State->Caption = "PRECHARGER is WDT Mode. Please [RESET] it.";
+        return true;
+    }
+    else
+        Panel_State->Caption = "";
+
+    if(charge[0].volt == 0 || charge[0].curr == 0 || charge[0].time == 0){
+        Panel_State->Caption = "No Setting Values.";
+        return true;
     }
 
 	if(!Mod_PLC->ClientSocket_PC->Active && !Mod_PLC->ClientSocket_PLC->Active)
@@ -928,7 +943,6 @@ void __fastcall TTotalForm::ChannelStatus()
         CmdAutoStop();
         dt1StartTime = StrToDateTime(Now().FormatString("yyyy/mm/dd hh:nn:ss"));
 	}
-
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::StatusTimerTimer(TObject *Sender)
@@ -1238,10 +1252,17 @@ void __fastcall TTotalForm::SetTrayID(AnsiString str_id)
     m_dateTime = Now();
     nManualStep = 0;
     nSetStepCount = 0;
-    if(stage.bconnected == true && Client->Active == true)
-    	Timer_ManualInspection->Enabled = true;
-    else
+    if(stage.bconnected == false || Client->Active == false)
         ShowMessage("Equipment is not connected!");
+    else if(charge[0].volt == 0 || charge[0].curr == 0 || charge[0].time == 0)
+        ShowMessage("No Setting values!");
+	else
+        Timer_ManualInspection->Enabled = true;
+
+//    if(stage.bconnected == true && Client->Active == true)
+//    	Timer_ManualInspection->Enabled = true;
+//    else
+//        ShowMessage("Equipment is not connected!");
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::SetResultList()
@@ -1925,6 +1946,10 @@ void __fastcall TTotalForm::SetFinalData()
             real_data.final_curr[nIndex] = real_data.curr[nIndex];
             real_data.final_capa[nIndex] = real_data.capa[nIndex];
 		}
+        else if(real_data.status[nIndex] > -2 && tempVolt <= 100){
+            real_data.final_curr[nIndex] = "0";
+            real_data.final_volt[nIndex] = "0";
+        }
 		//* -2는 무시, -2는 done 상태로 전압, 전류값이 점점 줄어든다.
         //* => 이 값은 final 데이터로 처리하면 안됨.
 		else if(real_data.status[nIndex] < -2){
@@ -1938,6 +1963,7 @@ void __fastcall TTotalForm::SetFinalData()
 
             real_data.final_capa[nIndex] = real_data.capa[nIndex];
         }
+
         //* 2024 07 09 다른 셀이 상태가 2이고 이 셀의 상태가 -2인 경우가 있음.
         //* 셀마다 끝나는 시점이 1,2 초 차이가 나기 때문.
         //* -2일때 처리를 하면 정상셀이 NG셀이 됨.

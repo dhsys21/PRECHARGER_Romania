@@ -69,6 +69,7 @@ void __fastcall TForm_ErrorSet::SaveErrorLog(int nStage, AnsiString msg1)
 void __fastcall TForm_ErrorSet::btnOKClick(TObject *Sender)
 {
     timerErrorOff->Enabled = true;
+    MeasureInfoForm->btnStopClick(Sender);
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm_ErrorSet::Timer_BringToFrontTimer(TObject *Sender)

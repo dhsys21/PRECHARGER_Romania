@@ -122,7 +122,7 @@ void __fastcall TTotalForm::WriteCommLog(AnsiString Type, AnsiString Msg)
 	dir = (AnsiString)LOG_PATH + Now().FormatString("yyyymmdd") + "\\";
 	ForceDirectories((AnsiString)dir);
 
-	str = dir + "STAGE" + FormatFloat("000", this->Tag + 1) + "(Comm)" + Now().FormatString("yymmdd-hh") + ".log";
+	str = dir + "STAGE" + FormatFloat("000", this->Tag + 1) + "_Comm_" + Now().FormatString("yymmdd_hh") + ".log";
 
 	if(FileExists(str))
 		file_handle = FileOpen(str, fmOpenWrite);
@@ -149,7 +149,7 @@ void __fastcall TTotalForm::WritePLCLog(AnsiString Type, AnsiString Msg)
 	dir = (AnsiString)LOG_PATH + Now().FormatString("yyyymmdd") + "\\";
 	ForceDirectories((AnsiString)dir);
 
-	str = dir + "STAGE" + FormatFloat("000", this->Tag + 1) + "(PLC)" + Now().FormatString("yymmdd-hh") + ".log";
+	str = dir + "STAGE" + FormatFloat("000", this->Tag + 1) + "_PLC_" + Now().FormatString("yymmdd_hh") + ".log";
 
 	if(FileExists(str))
 		file_handle = FileOpen(str, fmOpenWrite);
@@ -173,7 +173,7 @@ void __fastcall TTotalForm::ErrorLog()
 	dir = (AnsiString)LOG_PATH + Now().FormatString("yyyymmdd") + "\\";
     ForceDirectories((AnsiString)dir);
 
-	str = dir + "STAGE" + FormatFloat("000", this->Tag + 1) + "(ERROR)" + Now().FormatString("yymmdd-hh") + ".log";
+	str = dir + "STAGE" + FormatFloat("000", this->Tag + 1) + "_ERROR_" + Now().FormatString("yymmdd-hh") + ".log";
 
 	if(FileExists(str))
 		file_handle = FileOpen(str, fmOpenWrite);
