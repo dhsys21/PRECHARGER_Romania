@@ -27,6 +27,7 @@
 #include "ModVisaArray.h"
 #include "ModVisaThread.h"
 #include "FormError.h"
+#include "FormMessageBox.h"
 #include "FormCellIdError.h"
 #include <Vcl.Imaging.pngimage.hpp>
 #pragma link "wininet.lib"

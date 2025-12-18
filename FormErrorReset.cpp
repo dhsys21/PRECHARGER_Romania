@@ -17,14 +17,14 @@ __fastcall TForm_ErrorReset::TForm_ErrorReset(TComponent* Owner)
 //---------------------------------------------------------------------------
 void __fastcall TForm_ErrorReset::Timer_BringToFrontTimer(TObject *Sender)
 {
-    this->BringToFront();
+	this->BringToFront();
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm_ErrorReset::DisplayErrorMessage(int nStage)
 {
     stage = nStage;
     AnsiString title;
-    title = "SATGE #" + IntToStr(nStage + 1) + " Reset Equipment";
+    title = "STAGE #" + IntToStr(nStage + 1) + " Reset Equipment";
     Label_Title->Caption = title;
 	if(!this->Visible)
 	{
@@ -39,14 +39,17 @@ void __fastcall TForm_ErrorReset::DisplayErrorMessage(int nStage)
 //---------------------------------------------------------------------------
 void __fastcall TForm_ErrorReset::btnCancelClick(TObject *Sender)
 {
-    this->Close();
+	Timer_BringToFront->Enabled = false;
+	this->Close();
 }
 //---------------------------------------------------------------------------
 void __fastcall TForm_ErrorReset::btnResetClick(TObject *Sender)
 {
-    BaseForm->nForm[stage]->CmdReset();
-    Sleep(1000);
-    BaseForm->nForm[stage]->CmdResetTimer();
-    this->Close();
+	BaseForm->nForm[stage]->CmdReset();
+	Sleep(1000);
+	BaseForm->nForm[stage]->CmdResetTimer();
+
+	Timer_BringToFront->Enabled = false;
+	this->Close();
 }
 //---------------------------------------------------------------------------

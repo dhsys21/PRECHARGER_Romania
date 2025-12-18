@@ -5,7 +5,7 @@ object Form_PLCInterface: TForm_PLCInterface
   BorderStyle = bsSingle
   Caption = 'PLC Interface'
   ClientHeight = 951
-  ClientWidth = 1264
+  ClientWidth = 1089
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -22,7 +22,7 @@ object Form_PLCInterface: TForm_PLCInterface
   object GroupBox2: TGroupBox
     Left = 4
     Top = 8
-    Width = 1250
+    Width = 1080
     Height = 935
     Caption = 'PreCharger 1 (PLC - PC INTERFACE)'
     Font.Charset = DEFAULT_CHARSET
@@ -32,16 +32,16 @@ object Form_PLCInterface: TForm_PLCInterface
     Font.Style = [fsBold]
     ParentFont = False
     TabOrder = 0
-    OnClick = GroupBox2Click
+    OnDblClick = GroupBox2DblClick
     object ListView_PC: TListView
-      Left = 631
+      Left = 541
       Top = 47
-      Width = 615
+      Width = 525
       Height = 434
       Columns = <
         item
           Caption = 'PC_Address'
-          Width = 150
+          Width = 100
         end
         item
           Caption = 'PC_Name'
@@ -49,7 +49,7 @@ object Form_PLCInterface: TForm_PLCInterface
         end
         item
           Caption = 'PC_Value'
-          Width = 240
+          Width = 200
         end>
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -66,12 +66,12 @@ object Form_PLCInterface: TForm_PLCInterface
     object ListView_PLC: TListView
       Left = 15
       Top = 47
-      Width = 610
+      Width = 520
       Height = 434
       Columns = <
         item
           Caption = 'PLC_Address'
-          Width = 150
+          Width = 95
         end
         item
           Caption = 'PLC_Name'
@@ -79,7 +79,7 @@ object Form_PLCInterface: TForm_PLCInterface
         end
         item
           Caption = 'PLC_Value'
-          Width = 240
+          Width = 200
         end>
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -94,14 +94,14 @@ object Form_PLCInterface: TForm_PLCInterface
       ViewStyle = vsReport
     end
     object ListView_PC2: TListView
-      Left = 631
+      Left = 541
       Top = 489
-      Width = 615
+      Width = 525
       Height = 434
       Columns = <
         item
           Caption = 'PC_Address'
-          Width = 150
+          Width = 100
         end
         item
           Caption = 'PC_Name'
@@ -109,7 +109,7 @@ object Form_PLCInterface: TForm_PLCInterface
         end
         item
           Caption = 'PC_Value'
-          Width = 240
+          Width = 200
         end>
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -126,12 +126,12 @@ object Form_PLCInterface: TForm_PLCInterface
     object ListView_PLC2: TListView
       Left = 15
       Top = 487
-      Width = 610
+      Width = 520
       Height = 434
       Columns = <
         item
           Caption = 'PLC_Address'
-          Width = 150
+          Width = 95
         end
         item
           Caption = 'PLC_Name'
@@ -139,7 +139,7 @@ object Form_PLCInterface: TForm_PLCInterface
         end
         item
           Caption = 'PLC_Value'
-          Width = 240
+          Width = 200
         end>
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -155,7 +155,7 @@ object Form_PLCInterface: TForm_PLCInterface
     end
   end
   object Panel1: TAdvSmoothPanel
-    Left = 411
+    Left = 307
     Top = 136
     Width = 457
     Height = 289
@@ -188,12 +188,12 @@ object Form_PLCInterface: TForm_PLCInterface
     Fill.Rounding = 5
     Fill.ShadowOffset = 0
     Fill.Glow = gmNone
-    Version = '1.5.2.1'
+    Version = '1.7.1.2'
     Visible = False
     TabOrder = 1
     TMSStyle = 0
     object Label1: TLabel
-      Left = 179
+      Left = 123
       Top = 6
       Width = 70
       Height = 19
@@ -207,7 +207,7 @@ object Form_PLCInterface: TForm_PLCInterface
     end
     object Label4: TLabel
       Left = 255
-      Top = 30
+      Top = 19
       Width = 64
       Height = 16
       Caption = 'STAGE NO.'
@@ -229,6 +229,7 @@ object Form_PLCInterface: TForm_PLCInterface
       Appearance.Font.Name = 'Tahoma'
       Appearance.Font.Style = [fsBold]
       Appearance.Spacing = 0
+      Appearance.SimpleLayout = False
       Appearance.Rounding = 3
       Appearance.WordWrapping = False
       Status.Caption = '0'
@@ -252,7 +253,7 @@ object Form_PLCInterface: TForm_PLCInterface
       ParentFont = False
       TabOrder = 0
       Visible = False
-      Version = '2.1.1.5'
+      Version = '2.2.1.4'
       TMSStyle = 8
     end
     object Panel30: TPanel
@@ -422,7 +423,7 @@ object Form_PLCInterface: TForm_PLCInterface
     end
     object GroupBox1: TGroupBox
       Left = 255
-      Top = 106
+      Top = 52
       Width = 194
       Height = 178
       Caption = 'Volt/Curr Value'
@@ -492,9 +493,6 @@ object Form_PLCInterface: TForm_PLCInterface
         Width = 209
         Height = 21
         TabOrder = 0
-        Text = 
-          '1,22,43,64,85,106,127,148,169,190,211,232,253,274,295,316,337,35' +
-          '8,379,400'
       end
       object btnWriteNgValue: TButton
         Left = 144
@@ -507,15 +505,24 @@ object Form_PLCInterface: TForm_PLCInterface
       end
     end
     object cbStageNo: TComboBox
-      Left = 255
-      Top = 52
-      Width = 129
+      Left = 330
+      Top = 19
+      Width = 90
       Height = 21
       TabOrder = 8
       Text = '1'
       Items.Strings = (
         '1'
         '2')
+    end
+    object btnTestMode: TButton
+      Left = 301
+      Top = 242
+      Width = 88
+      Height = 32
+      Caption = 'TEST MODE'
+      TabOrder = 9
+      OnClick = btnTestModeClick
     end
   end
   object Timer_Update: TTimer

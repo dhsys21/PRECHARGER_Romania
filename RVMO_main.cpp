@@ -429,13 +429,13 @@ bool __fastcall TBaseForm::ReadSystemInfo()
 
 	ini = new TIniFile(file);
 
-    editPLCIPAddress->Text = ini->ReadString("PRECHARGER_PLC", "IP", "17.91.80.220");
-	editPLCPortPC->Text = ini->ReadString("PRECHARGER_PLC", "PORT1", "5007");
-	editPLCPortPLC->Text = ini->ReadString("PRECHARGER_PLC", "PORT2", "5008");
+    editPLCIPAddress->Text = ini->ReadString("PRE_PLC_CONNECTION", "IP", "17.91.71.221");
+	editPLCPortPC->Text = ini->ReadString("PRE_PLC_CONNECTION", "PORT1", "6007");
+	editPLCPortPLC->Text = ini->ReadString("PRE_PLC_CONNECTION", "PORT2", "6008");
 
     PLC_IPADDRESS = editPLCIPAddress->Text;
-	PLC_PCPORT = editPLCPortPC->Text.ToIntDef(5007);
-	PLC_PLCPORT = editPLCPortPLC->Text.ToIntDef(5008);
+	PLC_PCPORT = editPLCPortPC->Text.ToIntDef(6007);
+	PLC_PLCPORT = editPLCPortPLC->Text.ToIntDef(6008);
 
 	delete ini;
 }
@@ -470,6 +470,9 @@ void __fastcall TBaseForm::OpenFolder(UnicodeString path)
 void __fastcall TBaseForm::PasswordBtnClick(TObject *Sender)
 {
 	if(PassEdit->Text == "0000"){
+        for(int i=0; i<FormCnt ;++i){
+            nForm[i]->Close();
+        }
 		Application->Terminate();
 	}
 	else{
@@ -528,14 +531,17 @@ void __fastcall TBaseForm::btnInitClick(TObject *Sender)
 
 void __fastcall TBaseForm::Button1Click(TObject *Sender)
 {
-    if(WaitForMilliSeconds(1000) == true)
-        Form_Error->DisplayErrorMessage(0, nNgErr);
+//    if(WaitForMilliSeconds(1000) == true)
+//        Form_Error->DisplayErrorMessage(0, nNgErr);
+	if(Form_ErrorReset->Visible == false)
+        Form_ErrorReset->DisplayErrorMessage(0);
 }
 //---------------------------------------------------------------------------
 void __fastcall TBaseForm::Button5Click(TObject *Sender)
 {
-    if(Form_ErrorSet->Visible == false)
-	    Form_ErrorSet->DisplayErrorMessage(1);
+//    if(Form_ErrorSet->Visible == false)
+//	    Form_ErrorSet->DisplayErrorMessage(1);
+    nForm[1]->DisplayErrorMessage("SET", "Do you want to set PRECHARGER?");
 }
 //---------------------------------------------------------------------------
 
@@ -552,4 +558,5 @@ void __fastcall TBaseForm::Timer_PLCConnectTimer(TObject *Sender)
 	Timer_PLCConnect->Enabled = false;
 }
 //---------------------------------------------------------------------------
+
 

@@ -292,8 +292,9 @@ void __fastcall TMod_PLC::ClientSocket_PLCRead(TObject *Sender, TCustomWinSocket
 	for(int i = 0; i < length; i++)
 		plc_Read += IntToHex((unsigned char)plc_Read_Temp[i + 1], 2);
 
-   	BaseForm->Memo1->Lines->Add("PLC(READ) STAGE " + IntToStr(currentPlcIndex) + " : " + plc_Read);
-    BaseForm->nForm[currentPlcIndex]->WritePLCLog("RAW_Read", plc_Read);
+    //* for test
+	//BaseForm->Memo1->Lines->Add("PLC(READ) STAGE " + IntToStr(currentPlcIndex) + " : " + plc_Read);
+	//BaseForm->nForm[currentPlcIndex]->WritePLCLog("RAW_Read", plc_Read);
 
 	while(!plc_Read.IsEmpty() && (plc_Read.Length() >= 54) && (plc_Read.Pos("D000")))
 	{
@@ -368,10 +369,12 @@ void __fastcall TMod_PLC::Timer_PLC_WriteMsgTimer(TObject *Sender)
 
             //* PLC_DATA to AnsiString
             const unsigned char* ptr = (const unsigned char*)&plc_Data;
-            for(int i = 0; i < sizeof(plc_Data); i++)
+			for(int i = 0; i < sizeof(plc_Data); i++)
 				plcReadString = IntToHex(ptr[i], 2);
-            BaseForm->Memo1->Lines->Add("PLC(WRITE) STAGE " + IntToStr(currentPlcIndex) + " : " + plcReadString);
-            BaseForm->nForm[currentPlcIndex]->WritePLCLog("RAW_Write", plcReadString);
+
+			  //* for test
+//            BaseForm->Memo1->Lines->Add("PLC(WRITE) STAGE " + IntToStr(currentPlcIndex) + " : " + plcReadString);
+//            BaseForm->nForm[currentPlcIndex]->WritePLCLog("RAW_Write", plcReadString);
 
 			plc_ReadFlag = false;
             plc_ReadCount = 0;

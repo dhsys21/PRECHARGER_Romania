@@ -379,6 +379,7 @@ object TotalForm: TTotalForm
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+          OnDblClick = lblTrayInfoDblClick
         end
         object pnlTrayId: TPanel
           Left = 4
@@ -481,7 +482,7 @@ object TotalForm: TTotalForm
         object chkCycle: TCheckBox
           Left = 110
           Top = 2
-          Width = 49
+          Width = 91
           Height = 16
           Caption = 'TEST MODE'
           Font.Charset = DEFAULT_CHARSET
@@ -497,7 +498,7 @@ object TotalForm: TTotalForm
           OnMouseUp = chkBypassMouseUp
         end
         object chkBypass: TCheckBox
-          Left = 173
+          Left = 207
           Top = 2
           Width = 73
           Height = 16
@@ -718,6 +719,7 @@ object TotalForm: TTotalForm
           ParentFont = False
           TabOrder = 5
           Text = '2000'
+          OnMouseDown = editChargeTimeMouseDown
         end
         object Panel18: TPanel
           Left = 146
@@ -752,6 +754,7 @@ object TotalForm: TTotalForm
           ParentFont = False
           TabOrder = 7
           Text = '1000'
+          OnMouseDown = editChargeTimeMouseDown
         end
         object Panel25: TPanel
           Left = 290
@@ -786,6 +789,7 @@ object TotalForm: TTotalForm
           ParentFont = False
           TabOrder = 9
           Text = '30'
+          OnMouseDown = editChargeTimeMouseDown
         end
         object ConfigBtn1: TAdvSmoothButton
           Left = 332
@@ -4937,8 +4941,8 @@ object TotalForm: TTotalForm
     end
   end
   object Panel26: TPanel
-    Left = 473
-    Top = 170
+    Left = 825
+    Top = 8
     Width = 204
     Height = 58
     BorderWidth = 1
@@ -5834,8 +5838,8 @@ object TotalForm: TTotalForm
     end
   end
   object AdvSmoothPanel2: TAdvSmoothPanel
-    Left = 683
-    Top = 169
+    Left = 615
+    Top = 72
     Width = 414
     Height = 82
     Cursor = crDefault
@@ -6221,6 +6225,7 @@ object TotalForm: TTotalForm
         ParentFont = False
         TabOrder = 0
         Text = '192.168.10.230'
+        OnMouseDown = editChargeTimeMouseDown
       end
       object Panel23: TPanel
         Left = 14
@@ -6273,6 +6278,7 @@ object TotalForm: TTotalForm
         ParentFont = False
         TabOrder = 3
         Text = '50000'
+        OnMouseDown = editChargeTimeMouseDown
       end
       object btnConnectPRECHARGER: TAdvSmoothButton
         Left = 265
@@ -6378,7 +6384,7 @@ object TotalForm: TTotalForm
       Status.Appearance.Font.Name = 'Tahoma'
       Status.Appearance.Font.Style = []
       BevelColor = clMedGray
-      Caption = 'CANCEL'
+      Caption = 'Close'
       Color = clWhite
       ParentFont = False
       TabOrder = 1
@@ -6415,7 +6421,7 @@ object TotalForm: TTotalForm
       Status.Appearance.Font.Name = 'Tahoma'
       Status.Appearance.Font.Style = []
       BevelColor = clMedGray
-      Caption = 'SAVE'
+      Caption = 'Save'
       Color = clWhite
       ParentFont = False
       TabOrder = 2
@@ -6482,6 +6488,7 @@ object TotalForm: TTotalForm
           ParentFont = False
           TabOrder = 1
           Text = '4200'
+          OnMouseDown = editChargeTimeMouseDown
         end
         object Panel12: TPanel
           Left = 6
@@ -6516,6 +6523,7 @@ object TotalForm: TTotalForm
           ParentFont = False
           TabOrder = 3
           Text = '2000'
+          OnMouseDown = editChargeTimeMouseDown
         end
         object Panel13: TPanel
           Left = 6
@@ -6550,6 +6558,7 @@ object TotalForm: TTotalForm
           ParentFont = False
           TabOrder = 5
           Text = '120'
+          OnMouseDown = editChargeTimeMouseDown
         end
       end
       object Panel28: TPanel
@@ -6591,6 +6600,7 @@ object TotalForm: TTotalForm
         ParentFont = False
         TabOrder = 2
         Text = '20'
+        OnMouseDown = editChargeTimeMouseDown
       end
       object Panel15: TPanel
         Left = 12
@@ -6632,6 +6642,7 @@ object TotalForm: TTotalForm
         ParentFont = False
         TabOrder = 4
         Text = '5'
+        OnMouseDown = editChargeTimeMouseDown
       end
     end
     object gbPlcConnection: TGroupBox
@@ -6852,6 +6863,7 @@ object TotalForm: TTotalForm
         ParentFont = False
         TabOrder = 0
         Text = '20PQ'
+        OnMouseDown = editChargeTimeMouseDown
       end
     end
     object GroupBox2: TGroupBox
@@ -6989,6 +7001,147 @@ object TotalForm: TTotalForm
         Version = '2.1.1.5'
         OnClick = btnSaveConfigClick
         TMSStyle = 8
+      end
+    end
+  end
+  object pnlMessageBox: TAdvSmoothPanel
+    Left = 975
+    Top = 630
+    Width = 400
+    Height = 109
+    Cursor = crDefault
+    CanMove = True
+    Caption.Location = plCenterCenter
+    Caption.HTMLFont.Charset = DEFAULT_CHARSET
+    Caption.HTMLFont.Color = clWindowText
+    Caption.HTMLFont.Height = -11
+    Caption.HTMLFont.Name = 'Tahoma'
+    Caption.HTMLFont.Style = []
+    Caption.HTMLURLColor = clBlack
+    Caption.Font.Charset = DEFAULT_CHARSET
+    Caption.Font.Color = clWindowText
+    Caption.Font.Height = -24
+    Caption.Font.Name = 'Tahoma'
+    Caption.Font.Style = [fsBold]
+    Caption.ColorStart = clWhite
+    Caption.ColorEnd = clWhite
+    Caption.LineColor = clBlack
+    Caption.Line = False
+    Caption.TextAlignment = taCenter
+    Fill.Color = cl3DLight
+    Fill.ColorTo = cl3DLight
+    Fill.ColorMirror = cl3DLight
+    Fill.ColorMirrorTo = clWhite
+    Fill.GradientType = gtVertical
+    Fill.GradientMirrorType = gtVertical
+    Fill.BorderColor = clGray
+    Fill.Rounding = 10
+    Fill.ShadowOffset = 0
+    Fill.Glow = gmNone
+    Version = '1.5.2.1'
+    Visible = False
+    TabOrder = 9
+    Padding.Top = 3
+    TMSStyle = 0
+    object Label_Title: TLabel
+      Left = 10
+      Top = 3
+      Width = 26
+      Height = 18
+      Caption = 'SET'
+      Color = cl3DDkShadow
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -15
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentColor = False
+      ParentFont = False
+    end
+    object btnNo: TButton
+      Left = 280
+      Top = 79
+      Width = 100
+      Height = 26
+      Caption = 'NO'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+    end
+    object btnYes: TButton
+      Left = 160
+      Top = 79
+      Width = 100
+      Height = 26
+      Caption = 'YES'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 1
+    end
+    object AdvSmoothPanel1: TAdvSmoothPanel
+      Left = 2
+      Top = 24
+      Width = 396
+      Height = 50
+      Cursor = crDefault
+      CanMove = True
+      Caption.Location = plCenterCenter
+      Caption.HTMLFont.Charset = DEFAULT_CHARSET
+      Caption.HTMLFont.Color = clWindowText
+      Caption.HTMLFont.Height = -11
+      Caption.HTMLFont.Name = 'Tahoma'
+      Caption.HTMLFont.Style = []
+      Caption.HTMLURLColor = clBlack
+      Caption.Font.Charset = DEFAULT_CHARSET
+      Caption.Font.Color = clWindowText
+      Caption.Font.Height = -24
+      Caption.Font.Name = 'Tahoma'
+      Caption.Font.Style = [fsBold]
+      Caption.ColorStart = clWhite
+      Caption.ColorEnd = clWhite
+      Caption.LineColor = clBlack
+      Caption.Line = False
+      Caption.TextAlignment = taCenter
+      Fill.Color = clWhite
+      Fill.ColorTo = clWhite
+      Fill.ColorMirror = clWhite
+      Fill.ColorMirrorTo = clWhite
+      Fill.GradientType = gtVertical
+      Fill.GradientMirrorType = gtVertical
+      Fill.BorderColor = 14922381
+      Fill.BorderWidth = 0
+      Fill.Rounding = 5
+      Fill.ShadowOffset = 0
+      Fill.Glow = gmNone
+      Version = '1.5.2.1'
+      TabOrder = 2
+      Padding.Top = 3
+      TMSStyle = 0
+      object Label_Msg: TLabel
+        Left = 0
+        Top = 3
+        Width = 396
+        Height = 47
+        Align = alClient
+        Alignment = taCenter
+        Caption = 'Message'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        Layout = tlCenter
+        ExplicitWidth = 50
+        ExplicitHeight = 16
       end
     end
   end

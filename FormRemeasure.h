@@ -73,6 +73,7 @@ __published:	// IDE-managed Components
 	TPanel *pnormal1;
 	TPanel *Panel1;
 	TAdvSmoothButton *AccInitBtn;
+	TPanel *Panel20;
 	void __fastcall FormCreate(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall FormHide(TObject *Sender);

@@ -368,6 +368,7 @@ void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
 	{
 		Panel_State->Color = clRed;
 		Panel_State->Font->Color = clWhite;
+		Mod_PLC->SetValue(this->Tag, PC_D_PRE_ERROR, 1);
 		return;
 	}
 	else
@@ -376,7 +377,8 @@ void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
 		Panel_State->Color = clWhite;
 		Panel_State->Font->Color = clBlack;
 
-        BaseForm->advPLCInterfaceShow->Color = clWhite;
+		BaseForm->advPLCInterfaceShow->Color = clWhite;
+        Mod_PLC->SetValue(this->Tag, PC_D_PRE_ERROR, 0);
 	}
 
 	if(stage.arl == nAuto && BaseForm->nForm[this->Tag]->Client->Active == true)
@@ -404,7 +406,9 @@ bool __fastcall TTotalForm::ErrorCheck()
     DisplayError("");
 	if(!Client->Active)
 	{
-        Panel_State->Caption = "PRECHARGER Connection Fail.";
+        ErrorCheckStatus = "PRECHARGER Connection Fail.";
+        DisplayError(ErrorCheckStatus, true);
+
         if(ReContactTimer->Enabled == false)
         	ReContactTimer->Enabled = true;
         DisplayStatus(nNoAnswer);
@@ -412,7 +416,9 @@ bool __fastcall TTotalForm::ErrorCheck()
 	}
     else if(stage.bconnected == false)
     {
-		Panel_State->Caption = "BT Connection Fail.";
+        ErrorCheckStatus = "BT Connection Fail.";
+        DisplayError(ErrorCheckStatus, true);
+
 		DisplayStatus(nNoAnswer);
 		return true;
     }
@@ -424,14 +430,15 @@ bool __fastcall TTotalForm::ErrorCheck()
 
     if(Mod_PLC->GetPlcValue(this->Tag, PLC_D_PRE_TRAY_IN) == 0
     	&& (stage.status == WDT || stage.status == REC)){
-        Panel_State->Caption = "PRECHARGER is WDT Mode. Please [RESET] it.";
+        ErrorCheckStatus = "PRECHARGER is WDT Mode. Please [RESET] it.";
+        DisplayError(ErrorCheckStatus, true);
         return true;
     }
-    else
-        Panel_State->Caption = "";
 
-    if(charge[0].volt == 0 || charge[0].curr == 0 || charge[0].time == 0){
-        Panel_State->Caption = "No Setting Values.";
+	if(charge[0].volt == 0 || charge[0].curr == 0 || charge[0].time == 0
+		|| charge[1].volt == 0 || charge[1].curr == 0 || charge[1].time == 0){
+        ErrorCheckStatus = "No Setting Values.";
+        DisplayError(ErrorCheckStatus, true);
         return true;
     }
 
@@ -449,7 +456,7 @@ bool __fastcall TTotalForm::ErrorCheck()
 
 	if(Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data[this->Tag], PLC_D_PRE_ERROR))
 	{
-		ErrorCheckStatus = "PLC - Error!!";
+		ErrorCheckStatus = "PLC - Error!";
         DisplayError(ErrorCheckStatus, true);
 		if(OldErrorCheckStatus != ErrorCheckStatus) {
 			OldErrorCheckStatus = ErrorCheckStatus;
@@ -457,13 +464,7 @@ bool __fastcall TTotalForm::ErrorCheck()
 		}
         BaseForm->advPLCInterfaceShow->Color = clRed;
 
-        //* 2025 04 08 plc 연결이 안되면 아래 코드 때문에 수동측정도 못함.
-		//Initialization();
-		//if(Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data[this->Tag], PLC_D_PRE_PROB_CLOSE)
-		//		&& Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data[this->Tag], PLC_D_PRE_TRAY_IN))
-		//	CmdForceStop();
-
-		return true;
+//		return true;
 	}
 
 	return false;
@@ -810,7 +811,8 @@ void __fastcall TTotalForm::Timer_ResetTimer(TObject *Sender)
             if(nRStepCount > 5 && (pnlStatus->Caption == "IDL" || pnlStatus->Caption == "RUN"))
                 nRStep = 2;
             else if(nRStepCount > 15){
-                pnlResetMsg->Visible = false;
+                nRStepCount = 0;
+				pnlResetMsg->Visible = false;
                 //* error display
 				Form_Error->DisplayErrorMessage(this->Tag, nResetErr);
 				Form_Error->Tag = this->Tag;
@@ -947,6 +949,41 @@ void __fastcall TTotalForm::ChannelStatus()
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::StatusTimerTimer(TObject *Sender)
 {
+    if(stage.arl == nLocal){
+        DisplayError("");
+
+		if(charge[0].volt == 0 || charge[0].curr == 0 || charge[0].time == 0
+			|| charge[1].volt == 0 || charge[1].curr == 0 || charge[1].time == 0){
+            ErrorCheckStatus = "No Setting Values.";
+        	DisplayError(ErrorCheckStatus, true);
+        }
+
+		if(!Client->Active){
+            ErrorCheckStatus = "PRECHARGER Connection Fail.";
+        	DisplayError(ErrorCheckStatus, true);
+        }
+		else if(stage.bconnected == false){
+            ErrorCheckStatus = "BT Connection Fail.";
+        	DisplayError(ErrorCheckStatus, true);
+        }
+
+		if(Mod_PLC->GetPlcValue(this->Tag, PLC_D_PRE_TRAY_IN) == 0
+			&& (stage.status == WDT || stage.status == REC)){
+            ErrorCheckStatus = "PRECHARGER is WDT Mode. Please [RESET] it.";
+        	DisplayError(ErrorCheckStatus, true);
+        }
+
+		if(!Mod_PLC->ClientSocket_PC->Active && !Mod_PLC->ClientSocket_PLC->Active){
+            ErrorCheckStatus = "PLC - PC Connection Fail.";
+        	DisplayError(ErrorCheckStatus, true);
+        }
+
+		if(Mod_PLC->GetDouble(Mod_PLC->plc_Interface_Data[this->Tag], PLC_D_PRE_ERROR)){
+            ErrorCheckStatus = "PLC - Error!";
+        	DisplayError(ErrorCheckStatus, true);
+        }
+	}
+
     StageStatus();
 
     if(tray.ams == true)
@@ -1094,7 +1131,7 @@ void __fastcall TTotalForm::DisplayChannelInfo()
 					//GetCodeColor(panel[i], i);
 				 }
 
-                 if(testTime->Caption.ToIntDef(0) > 10)
+                 if(testTime->Caption.ToIntDef(0) > 15)
 					GetCodeColor(panel[i], i);
 			}
 
@@ -1254,7 +1291,8 @@ void __fastcall TTotalForm::SetTrayID(AnsiString str_id)
     nSetStepCount = 0;
     if(stage.bconnected == false || Client->Active == false)
         ShowMessage("Equipment is not connected!");
-    else if(charge[0].volt == 0 || charge[0].curr == 0 || charge[0].time == 0)
+	else if(charge[0].volt == 0 || charge[0].curr == 0 || charge[0].time == 0
+		|| charge[1].volt == 0 || charge[1].curr == 0 || charge[1].time == 0)
         ShowMessage("No Setting values!");
 	else
         Timer_ManualInspection->Enabled = true;
@@ -1736,8 +1774,12 @@ void __fastcall TTotalForm::SET_SENDATA(AnsiString eqstatus, AnsiString runcount
         charge[1].volt = BaseForm->StringToDouble(btset2[3], 4);
     }
 
-    lblSet1->Caption = FormatFloat("0", charge[0].volt * 1000.0) + "mV "
-    	+ FormatFloat("0", charge[0].curr * 1000.0) + "mA " + FormatFloat("0", charge[0].time) + "s";
+	if(charge[0].time == charge[1].time && charge[0].curr == charge[1].curr && charge[0].volt == charge[1].volt){
+		lblSet1->Caption = FormatFloat("0", charge[0].volt * 1000.0) + "mV "
+			+ FormatFloat("0", charge[0].curr * 1000.0) + "mA " + FormatFloat("0", charge[0].time) + "s";
+	} else{
+		lblSet1->Caption = "0mV 0mA 0s";
+    }
 
     //* 충전종료 및 Final 데이터 저장
     if(tray.ams == true && stage.status == IDL && stage.oldstatus == RUN)
@@ -1982,23 +2024,21 @@ void __fastcall TTotalForm::SetEquipStatus(AnsiString eqStatus, int stageno)
         if(stage.status == stage.oldstatus) stage.status = IDL;
         else if(stage.status != stage.oldstatus) stage.oldstatus = IDL;
 
-//		if(Timer_Reboot->Enabled == true)
-//			Timer_Reboot->Enabled = false;
-//		if(Timer_Reset->Enabled == true)
-//			Timer_Reset->Enabled = false;
-
+        stage.status = IDL;
         tray.channel_charging = false;
     }
     else if(eqStatus == "RUN"){
         if(stage.status == stage.oldstatus) stage.status = RUN;
         else if(stage.status != stage.oldstatus) stage.oldstatus = RUN;
 
+        stage.status = RUN;
         tray.channel_charging = true;
     }
     else if(eqStatus == "WDT"){
         if(stage.status == stage.oldstatus) stage.status = WDT;
         else if(stage.status != stage.oldstatus) stage.oldstatus = WDT;
 
+        stage.status = WDT;
         tray.channel_charging = false;
         //* reset
     }
@@ -2006,6 +2046,7 @@ void __fastcall TTotalForm::SetEquipStatus(AnsiString eqStatus, int stageno)
         if(stage.status == stage.oldstatus) stage.status = REC;
         else if(stage.status != stage.oldstatus) stage.oldstatus = REC;
 
+        stage.status = REC;
         tray.channel_charging = false;
         //* reboot
     }
@@ -2019,9 +2060,11 @@ void __fastcall TTotalForm::SetEquipStatus(AnsiString eqStatus, int stageno)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::ConfigBtn1Click(TObject *Sender)
 {
-    PreChargeSet(this->Tag);
+    if(MessageBox(Handle, L"Do you want to set PRECHARGER?", L"SET", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+        PreChargeSet(this->Tag);
 
-    MeasureInfoForm->initChart(config.volt, config.curr);
+        MeasureInfoForm->initChart(config.volt, config.curr);
+    }
 }
 //---------------------------------------------------------------------------
 AnsiString __fastcall TTotalForm::convertCondition(AnsiString condition)
@@ -2034,8 +2077,7 @@ AnsiString __fastcall TTotalForm::convertCondition(AnsiString condition)
 AnsiString __fastcall TTotalForm::convertCondition2(int iCondition)
 {
 	double dCondition = iCondition / 1000.0;
-//	return FormatFloat("0.000", dCondition);
-    return FormatFloat("0.0", dCondition);
+	return FormatFloat("0.000", dCondition);
 }
 //---------------------------------------------------------------------------
 void _fastcall TTotalForm::PreChargeSet(int stageno)
@@ -2051,7 +2093,7 @@ void _fastcall TTotalForm::PreChargeSet(int stageno)
 		int curr = editChargeCurrent->Text.ToIntDef(260);
         if(curr < 260) {
             ShowMessage("Please use Current more than 260mA");
-            editChargeCurrent->Text = "500";
+            editChargeCurrent->Text = "260";
         }
 
 		int time = editChargeTime->Text.ToIntDef(240);
@@ -2061,15 +2103,15 @@ void _fastcall TTotalForm::PreChargeSet(int stageno)
         }
 
 		int max_volt = editMaxChargeVolt->Text.ToIntDef(4200);
-		int max_curr = editMaxChargeCurrent->Text.ToIntDef(2500);
-		int max_time = editMaxChargeTime->Text.ToIntDef(300);
+		int max_curr = editMaxChargeCurrent->Text.ToIntDef(5000);
+		int max_time = editMaxChargeTime->Text.ToIntDef(500);
 
 		if(volt >= max_volt) editChargeVolt->Text = FormatFloat("00", max_volt);
 		if(curr >= max_curr) editChargeCurrent->Text = FormatFloat("00", max_curr);
 		if(time >= max_time) editChargeTime->Text = FormatFloat("00", max_time);
 
 
-		if(MessageBox(Handle, L"Are you sure want to save?", L"SAVE", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+//		if(MessageBox(Handle, L"Are you sure want to save?", L"SAVE", MB_YESNO|MB_ICONQUESTION) == ID_YES){
 			//CmdSetStep();
 			WriteSystemInfo();
 			ReadSystemInfo();
@@ -2077,7 +2119,7 @@ void _fastcall TTotalForm::PreChargeSet(int stageno)
 
             //* SetStep
             MeasureInfoForm->SetStep(stageno);
-		}
+//		}
 	}
 	else ShowMessage("You can't set up while charging.");
 }
@@ -2200,31 +2242,39 @@ void __fastcall TTotalForm::chkBypassMouseUp(TObject *Sender,
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnManualClick(TObject *Sender)
 {
-	//if(nSection == STEP_WAIT &&	nStep == 0)
-	//{
-		stage.arl_reserve = nLocal;
-		stage.arl = nLocal;
-		this->CmdManualMod(true);
-		VisibleBox(GrpLocal);
+    UnicodeString str;
+    str = "Do you want to change PRECHARGE #" + IntToStr(this->Tag + 1) + " to MANUAL MODE?";
+    if(MessageBox(Handle, str.c_str(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+        //if(nSection == STEP_WAIT &&	nStep == 0)
+        //{
+            stage.arl_reserve = nLocal;
+            stage.arl = nLocal;
+            this->CmdManualMod(true);
+            VisibleBox(GrpLocal);
 
-        //InitMeasureForm();
-		MeasureInfoForm->pLocal->Visible = true;
-	//}
-	//else ShowMessage("You cannot change it manually while charging.");
+            //InitMeasureForm();
+            MeasureInfoForm->pLocal->Visible = true;
+        //}
+        //else ShowMessage("You cannot change it manually while charging.");
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnAutoClick(TObject *Sender)
 {
-	stage.arl_reserve = nAuto;
-	stage.arl = nAuto;
-    MeasureInfoForm->pLocal->Visible = false;
-	this->CmdManualMod(false);
-	VisibleBox(GrpMain);
+    UnicodeString str;
+    str = "Do you want to change PRECHARGE #" + IntToStr(this->Tag + 1) + " to AUTO MODE?";
+    if(MessageBox(Handle, str.c_str(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+        stage.arl_reserve = nAuto;
+        stage.arl = nAuto;
+        MeasureInfoForm->pLocal->Visible = false;
+        this->CmdManualMod(false);
+        VisibleBox(GrpMain);
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnTrayOutClick(TObject *Sender)
 {
-	if(MessageBox(Handle, L"Are you sure you want to eject the tray?", L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+	if(MessageBox(Handle, L"Do you want to eject the tray?", L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
         Mod_PLC->SetValue(this->Tag, PC_D_PRE_PROB_CLOSE, 0);
         Mod_PLC->SetValue(this->Tag, PC_D_PRE_PROB_OPEN, 1);
 //        Mod_PLC->SetValue(this->Tag, PC_D_PRE_COMPLETE, 1);
@@ -2303,17 +2353,21 @@ void __fastcall TTotalForm::btnSaveConfigClick(TObject *Sender)
 		}
 		else ShowMessage("You can't set up while charging.");
 	}
-	else
-	{
-		ShowMessage("Current can't be set above 3000mA.");
-	}
+//	else
+//	{
+//		ShowMessage("Current can't be set above 3000mA.");
+//	}
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnInitClick(TObject *Sender)
 {
-	WritePLCLog("Init", "Initialization()");
+    UnicodeString str;
+	str = "Do you want to initialize PRECHARGE # " + IntToStr(this->Tag + 1) + "?";
+    if(MessageBox(Handle, str.c_str(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+        WritePLCLog("Init", "Initialization()");
 
-	Initialization();
+        Initialization();
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::lblTitleDblClick(TObject *Sender)
@@ -2605,3 +2659,33 @@ void __fastcall TTotalForm::WriteTrayLog(AnsiString msg)
     Panel_State->Caption = msg;
 }
 //---------------------------------------------------------------------------
+
+void __fastcall TTotalForm::editChargeTimeMouseDown(TObject *Sender, TMouseButton Button,
+          TShiftState Shift, int X, int Y)
+{
+    TEdit *edit;
+	edit = (TEdit*)Sender;
+    edit->SetFocus();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TTotalForm::lblTrayInfoDblClick(TObject *Sender)
+{
+    chkCycle->Visible = !chkCycle->Visible;
+    chkBypass->Visible = !chkBypass->Visible;
+    chkCellIdBypass->Visible = !chkCellIdBypass->Visible;
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::DisplayErrorMessage(AnsiString title, AnsiString msg)
+{
+    title = title + " - STAGE #" + IntToStr(this->Tag + 1);
+    Label_Title->Caption = title;
+    Label_Msg->Caption = msg;
+	pnlMessageBox->Left = 30;
+    pnlMessageBox->Top = 400;
+    pnlMessageBox->BringToFront();
+    pnlMessageBox->Visible = true;
+    btnYes->SetFocus();
+}
+//---------------------------------------------------------------------------
+

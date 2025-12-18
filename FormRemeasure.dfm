@@ -885,6 +885,23 @@ object RemeasureForm: TRemeasureForm
       TabOrder = 35
     end
   end
+  object Panel20: TPanel
+    Left = 125
+    Top = 17
+    Width = 400
+    Height = 20
+    BevelOuter = bvNone
+    Caption = 'PRECHARGER'
+    Color = 8552834
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 3
+  end
   object SaveDialog: TSaveDialog
     DefaultExt = '*.csv'
     Filter = 'Save(*.csv)|*.csv'

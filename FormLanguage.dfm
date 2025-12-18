@@ -129,8 +129,8 @@ object Form_Language: TForm_Language
     Height = 441
     Strings.Strings = (
       'OK=OK'
-      'SAVE=SAVE'
-      'CANCEL=CANCEL'
+      'SAVE=Save'
+      'CANCEL=Close'
       'CONFIG=CONFIG'
       'MANUAL=MANUAL'
       'AUTO=AUTO'

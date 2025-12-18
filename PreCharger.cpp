@@ -17,6 +17,7 @@ USEFORM("FormRemeasure.cpp", RemeasureForm);
 USEFORM("FormNgCountError.cpp", Form_NgCountError);
 USEFORM("FormLanguage.cpp", Form_Language);
 USEFORM("FormMeasureInfo.cpp", MeasureInfoForm);
+USEFORM("FormMessageBox.cpp", Form_MessageBox);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
@@ -48,6 +49,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 		Application->CreateForm(__classid(TForm_ErrorReset), &Form_ErrorReset);
 		Application->CreateForm(__classid(TForm_CellIdError), &Form_CellIdError);
 		Application->CreateForm(__classid(TForm_ErrorSet), &Form_ErrorSet);
+		Application->CreateForm(__classid(TForm_MessageBox), &Form_MessageBox);
 		Application->Run();
 	}
 	catch (Exception &exception)

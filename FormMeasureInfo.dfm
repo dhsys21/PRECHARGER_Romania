@@ -1,5 +1,5 @@
 object MeasureInfoForm: TMeasureInfoForm
-  Left = 17
+  Left = 907
   Top = 125
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
@@ -1551,7 +1551,7 @@ object MeasureInfoForm: TMeasureInfoForm
       Visible = False
     end
     object clocv: TPanel
-      Left = 3
+      Left = 907
       Top = 28
       Width = 50
       Height = 23
@@ -1568,7 +1568,7 @@ object MeasureInfoForm: TMeasureInfoForm
       TabOrder = 17
     end
     object clir: TPanel
-      Left = 3
+      Left = 907
       Top = 3
       Width = 50
       Height = 23
@@ -2302,7 +2302,7 @@ object MeasureInfoForm: TMeasureInfoForm
       ParentFont = False
       TabOrder = 1
       object btnProbeOpen: TAdvSmoothButton
-        Left = 142
+        Left = 135
         Top = 36
         Width = 100
         Height = 90
@@ -2339,7 +2339,7 @@ object MeasureInfoForm: TMeasureInfoForm
         TMSStyle = 8
       end
       object btnProbeClose: TAdvSmoothButton
-        Left = 20
+        Left = 29
         Top = 36
         Width = 100
         Height = 90
@@ -2393,6 +2393,23 @@ object MeasureInfoForm: TMeasureInfoForm
     ParentBackground = False
     ParentFont = False
     TabOrder = 3
+  end
+  object Panel1: TPanel
+    Left = 121
+    Top = 13
+    Width = 400
+    Height = 20
+    BevelOuter = bvNone
+    Caption = 'PRECHARGER'
+    Color = 8552834
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWhite
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentBackground = False
+    ParentFont = False
+    TabOrder = 4
   end
   object SaveDialog: TSaveDialog
     DefaultExt = '*.csv'

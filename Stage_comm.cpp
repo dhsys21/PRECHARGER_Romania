@@ -34,6 +34,57 @@ void __fastcall TTotalForm::CmdForceStop_Original()
 	}
 }
 //---------------------------------------------------------------------------
+void __fastcall TTotalForm::CmdForceStop_Cycle()
+{
+	// 자동검사 7. 검사종료	- Probe 오픈
+	DisplayStatus(nEND);
+	Panel_State->Caption = " PreCharger Complete ... ";
+
+    Mod_PLC->SetValue(this->Tag, PC_D_PRE_PROB_OPEN, 1);
+	WritePLCLog("AutoInspection_Measure", "CmdForceStop ... , PC_INTERFACE_PROB_OPEN = 1");
+
+    //* BadInfomation
+    int ngCount = 0;
+	NgCount = 0;
+
+	AnsiString strIrocvNg = Form_PLCInterface->editIrOcvNg->Text;
+	vector<int> ngchannels = BaseForm->StringToVector(strIrocvNg);
+    int nTag = Form_PLCInterface->cbStageNo->Text.ToIntDef(1) - 1;
+    int32_t voltage_int, current_int;
+
+	for(int i = 0; i < 25; ++i){
+		for(int j = 0; j < 16; j++)
+		{
+			int nChannel = i * 16 + j + 1;
+			if(find(ngchannels.begin(), ngchannels.end(), nChannel) != ngchannels.end())
+			{
+				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data[nTag], PC_D_PRE_MEASURE_OK_NG + i, j, true);
+                acc_remeasure[nChannel - 1] += 1;   // 셀이 있고 에러일 때 count 증가
+				ngCount++;
+                voltage_int = 100;
+                current_int = 0;
+			}
+			else
+			{
+				Mod_PLC->SetData(Mod_PLC->pc_Interface_Data[nTag], PC_D_PRE_MEASURE_OK_NG + i, j, false);
+
+				real_data.final_volt[nChannel - 1] = BaseForm->StringToDouble(Form_PLCInterface->editVoltage->Text, 0) + (double)((nChannel - 1) * 0.1);
+				voltage_int = static_cast<int32_t>(std::floor(BaseForm->StringToDouble(real_data.final_volt[nChannel -1 ], 0) * 10.0 + 0.5));
+
+				real_data.final_curr[nChannel - 1] = BaseForm->StringToDouble(Form_PLCInterface->editCurrent->Text, 0) + (double)((nChannel - 1) * 0.1);
+				current_int = static_cast<int32_t>(std::floor(BaseForm->StringToDouble(real_data.final_curr[nChannel - 1], 0) * 10.0 + 0.5));
+			}
+
+			Mod_PLC->SetVoltValue(this->Tag, PC_D_PRE_VOLTAGE_VALUE, nChannel - 1, voltage_int);
+			Mod_PLC->SetCurrValue(this->Tag, PC_D_PRE_CURRENT_VALUE, nChannel - 1, current_int);
+        }
+	}
+
+	Mod_PLC->SetValue(nTag, PC_D_PRE_NG_COUNT, ngCount);
+	WritePLCLog("AutoInspection_Measure", "CmdForceStop ... , Write BadInfomation");
+    WritePLCLog("AutoInspection_Measure", "CmdForceStop ... , Write Voltage, Current Value");
+}
+//---------------------------------------------------------------------------
 void __fastcall TTotalForm::CmdForceStop()
 {
 	// 자동검사 7. 검사종료	- Probe 오픈
@@ -60,9 +111,6 @@ void __fastcall TTotalForm::CmdForceStop()
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::CmdTrayOut()
 {
-    Mod_PLC->SetValue(this->Tag, PC_D_PRE_CELL_SERIAL_COMP, 0);
-    Mod_PLC->SetValue(this->Tag, PC_D_PRE_CELL_SERIAL_START, 0);
-
 	// 자동검사 9(끝). 트레이 방출
 	if(NgCount == tray.cell_count || NgCount > editNGAlarmCount->Text.ToIntDef(10)){
         Form_Error->DisplayErrorMessage(this->Tag, nNgErr);
@@ -145,7 +193,11 @@ void __fastcall TTotalForm::CmdAutoStop()
     DisplayChannelInfo();
     //* final data 저장.
     AutoTestFinish();
-    CmdForceStop();
+
+    if(chkCycle->Checked == false)
+    	CmdForceStop();
+    else
+        CmdForceStop_Cycle();
 
     //* 위 버전으로 테스트 필요. 아래 코드는 시간이 3-4초 이상 걸림.
     //* GetReport, AutoTestFinish

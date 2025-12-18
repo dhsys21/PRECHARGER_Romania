@@ -44,7 +44,7 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
 	{
 		nw = Panel35->Width*0.8;
 		nh = Panel2->Height/22/2;
-		nx = Panel2->Width - (nw+2);
+		nx = Panel2->Width - (nw + 2 + nw + 3);
 		ny = nh*2 + 5;
 
 		for(int index=0; index<MAXCHANNEL;){
@@ -65,7 +65,7 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
 			if(index % LINECOUNT == 0)
 			{
 				ny += (nh + 1) * 2 + 1;
-				nx = Panel2->Width - (nw+2);
+				nx = Panel2->Width - (nw + 2 + nw + 3);
 				if( (index / LINECOUNT) % (LINECOUNT / 2) == 0) ny += 1;
 			}
 		}
@@ -169,7 +169,7 @@ void __fastcall TMeasureInfoForm::MakePanel(AnsiString type)
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::MakeUIPanel(AnsiString type)
 {
-	int nx, ny, nw, nh;
+	int nx, ny, nw, nh, pUInx;
     nw = Panel35->Width*0.8;
 	nh = Panel35->Height*0.8+1;
 
@@ -179,6 +179,8 @@ void __fastcall TMeasureInfoForm::MakeUIPanel(AnsiString type)
 	clocv->Height = nh/2-1;
 	clir->Top = 2;
 	clocv->Top = clir->Height +4;
+    clir->Left = Panel2->Width - nw - 3;
+    clocv->Left = Panel2->Width - nw - 3;
 
     if(type == "1"){
         ny = Panel2->Height - (nh) ;
@@ -224,14 +226,14 @@ void __fastcall TMeasureInfoForm::MakeUIPanel(AnsiString type)
     }
     else if(type == "3"){
         ny = nh + 5;
-        nx = Panel2->Width - (nw + 2);
-
+        nx = Panel2->Width - (nw + 2 + nw + 3);
+        pUInx = Panel2->Width - (nw + 3);
         for(int index=0; index<LINECOUNT;){
             pUIx[index] = new TPanel(this);
             pUIy[index] = new TPanel(this);
 
             SetUIOption(pUIx[index], nx, Panel35->Top, nw, nh, index);
-            SetUIOption(pUIy[index], Panel35->Width-nw-8, ny-1, nw, nh, index);
+            SetUIOption(pUIy[index], pUInx, ny-1, nw, nh, index);
             pUIx[index]->ParentBackground = false;
             pUIy[index]->ParentBackground = false;
 
@@ -319,6 +321,7 @@ void __fastcall TMeasureInfoForm::SetOption(TPanel *pnl, int nx, int ny, int nw,
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::SetUIOption(TPanel *pnl, int nx, int ny, int nw, int nh, int index)
 {
+    char Cap_Y;
 	pnl->Parent = Panel2;
 	pnl->ParentBackground = false;
 	pnl->Left = nx;
@@ -327,7 +330,9 @@ void __fastcall TMeasureInfoForm::SetUIOption(TPanel *pnl, int nx, int ny, int n
 	pnl->Height = nh;
 	pnl->Alignment = taCenter;
 	pnl->Color = Panel35->Color;
-	pnl->Caption = index+1;
+	pnl->Caption = index + 1;
+    Cap_Y = index + 65;
+    if(nx == Panel2->Width - (nw + 3)) pnl->Caption = Cap_Y;
 	pnl->ShowCaption = true;
 	pnl->Font->Size = 12;
 	pnl->Font->Color = clBlack;

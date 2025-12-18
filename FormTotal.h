@@ -250,6 +250,12 @@ __published:	// IDE-managed Components
 	TPanel *pnlCurrMin;
 	TEdit *editCurrMin;
 	TAdvSmoothButton *btnSaveConfig;
+	TAdvSmoothPanel *pnlMessageBox;
+	TLabel *Label_Title;
+	TLabel *Label_Msg;
+	TButton *btnYes;
+	TButton *btnNo;
+	TAdvSmoothPanel *AdvSmoothPanel1;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnSaveConfigClick(TObject *Sender);
 	void __fastcall BitmapBtn5Click(TObject *Sender);
@@ -292,6 +298,10 @@ __published:	// IDE-managed Components
 	void __fastcall localTestClick(TObject *Sender);
     void __fastcall ChInfoMouseEnter(TObject *Sender);
 	void __fastcall ChInfoMouseLeave(TObject *Sender);
+	void __fastcall editChargeTimeMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
+          int X, int Y);
+	void __fastcall lblTrayInfoDblClick(TObject *Sender);
+
 private:	// User declarations
 //---------------------------------------------------------------------------
 // Controller 데이터 처리
@@ -369,7 +379,6 @@ private:	// User declarations
 	void __fastcall ErrorLog();
     void __fastcall ErrorMsg(int err);
     void __fastcall WriteCommLog(AnsiString Type, AnsiString Msg);
-
 	void __fastcall StageClearAlarm();
 	void __fastcall StageReady();
 
@@ -425,11 +434,13 @@ public:		// User declarations
 	void __fastcall CmdTrayOut();
 	void __fastcall CmdTrayOut_Original();
 	void __fastcall CmdForceStop();
+    void __fastcall CmdForceStop_Cycle();
 	void __fastcall CmdForceStop_Original();
 	void __fastcall CmdManualMod(bool Set);
     void __fastcall AutoTestFinish();
 	void __fastcall ReadchannelMapping();
 
+    void __fastcall DisplayErrorMessage(AnsiString title, AnsiString msg);
     //* CELL SERIAL STEP
     void __fastcall ChangeCellSerialStep(int nstep);
 

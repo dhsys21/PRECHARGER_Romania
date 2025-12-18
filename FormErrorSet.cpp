@@ -25,7 +25,7 @@ void __fastcall TForm_ErrorSet::DisplayErrorMessage(int nStage)
 {
     stage = nStage;
     AnsiString title;
-    title = "SATGE #" + IntToStr(nStage + 1) + " Setting Error";
+    title = "STAGE #" + IntToStr(nStage + 1) + " Setting Error";
     Label_Title->Caption = title;
 	if(!this->Visible)
 	{

@@ -202,11 +202,6 @@ void __fastcall TForm_PLCInterface::Timer_UpdateTimer(TObject *Sender)
 	}
 }
 //---------------------------------------------------------------------------
-void __fastcall TForm_PLCInterface::GroupBox2Click(TObject *Sender)
-{
-    Panel1->Visible = !Panel1->Visible;
-}
-//---------------------------------------------------------------------------
 void __fastcall TForm_PLCInterface::btnWriteValueClick(TObject *Sender)
 {
 	int address = cbAddress->Text.ToIntDef(21000); //* 21000, 22700
@@ -274,4 +269,19 @@ void __fastcall TForm_PLCInterface::btnWriteIrOcvValueClick(TObject *Sender)
 //---------------------------------------------------------------------------
 
 
+
+void __fastcall TForm_PLCInterface::btnTestModeClick(TObject *Sender)
+{
+    double voltage_base = BaseForm->StringToDouble(editVoltage->Text, 1);
+	double current_base = BaseForm->StringToDouble(editCurrent->Text, 1);
+    int nTag = cbStageNo->Text.ToIntDef(1) - 1;
+    BaseForm->nForm[nTag]->CmdForceStop_Cycle();
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm_PLCInterface::GroupBox2DblClick(TObject *Sender)
+{
+    Panel1->Visible = !Panel1->Visible;
+}
+//---------------------------------------------------------------------------
 

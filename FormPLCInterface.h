@@ -46,14 +46,16 @@ __published:	// IDE-managed Components
 	TListView *ListView_PLC2;
 	TLabel *Label4;
 	TComboBox *cbStageNo;
+	TButton *btnTestMode;
 	void __fastcall Timer_UpdateTimer(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
-	void __fastcall GroupBox2Click(TObject *Sender);
 	void __fastcall btnWriteValueClick(TObject *Sender);
 	void __fastcall btnWriteNgValueClick(TObject *Sender);
 	void __fastcall btnWriteIrOcvValueClick(TObject *Sender);
 	void __fastcall Button1Click(TObject *Sender);
+	void __fastcall btnTestModeClick(TObject *Sender);
+	void __fastcall GroupBox2DblClick(TObject *Sender);
 private:	// User declarations
 	void __fastcall SetListViewPLC(int nTag);
 	void __fastcall SetListViewPC(int nTag);
