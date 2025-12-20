@@ -12,6 +12,7 @@ void __fastcall TTotalForm::WriteSystemInfo()
 	file = (AnsiString)BIN_PATH + "SystemInfo_"+ IntToStr(this->Tag + 1) + ".inf";
 	ini = new TIniFile(file);
 
+    CheckMaxValue();
 	ini->WriteString("PRECHARGE", "MAX_VOLTAGE", editMaxChargeVolt->Text);
 	ini->WriteString("PRECHARGE", "MAX_CURRENT", editMaxChargeCurrent->Text);
 	ini->WriteString("PRECHARGE", "MAX_TIME", editMaxChargeTime->Text);
@@ -62,16 +63,15 @@ bool __fastcall TTotalForm::ReadSystemInfo()
     config.time = BaseForm->StringToInt(editChargeTime->Text, 60);
 
 	editCurrMin->Text = ini->ReadString("MINCURRENT", "CURRENT", 100);
-
 	editNGAlarmCount->Text = ini->ReadString("NG_ALARM_COUNT", "COUNT", "20");
 
-	editPLCIPAddress->Text = ini->ReadString("PRECHARGER_PLC", "IP", "17.91.80.220");
-	editPLCPortPC->Text = ini->ReadString("PRECHARGER_PLC", "PORT1", "5007");
-	editPLCPortPLC->Text = ini->ReadString("PRECHARGER_PLC", "PORT2", "5008");
+//	editPLCIPAddress->Text = ini->ReadString("PRECHARGER_PLC", "IP", "17.91.80.220");
+//	editPLCPortPC->Text = ini->ReadString("PRECHARGER_PLC", "PORT1", "5007");
+//	editPLCPortPLC->Text = ini->ReadString("PRECHARGER_PLC", "PORT2", "5008");
 
-    PLC_IPADDRESS = editPLCIPAddress->Text;
-	PLC_PCPORT = editPLCPortPC->Text.ToIntDef(5007);
-	PLC_PLCPORT = editPLCPortPLC->Text.ToIntDef(5008);
+//  PLC_IPADDRESS = editPLCIPAddress->Text;
+//	PLC_PCPORT = editPLCPortPC->Text.ToIntDef(6007);
+//	PLC_PLCPORT = editPLCPortPLC->Text.ToIntDef(6008);
 
 	editPRECHARGERIPAddress->Text = ini->ReadString("PRECHARGER", "IP", "192.168.10.231");
 	editPRECHARGERPort->Text = ini->ReadString("PRECHARGER", "PORT", "50000");
@@ -91,6 +91,41 @@ bool __fastcall TTotalForm::ReadSystemInfo()
 	delete ini;
 }
 //---------------------------------------------------------------------------
+bool __fastcall TTotalForm::ReadPlcInfo()
+{
+	TIniFile *ini;
+
+	AnsiString file;
+	file = (AnsiString)BIN_PATH + "config.inf";
+
+	ini = new TIniFile(file);
+
+    editPLCIPAddress->Text = ini->ReadString("PRE_PLC_CONNECTION", "IP", "17.91.71.221");
+	editPLCPortPC->Text = ini->ReadString("PRE_PLC_CONNECTION", "PORT1", "6007");
+	editPLCPortPLC->Text = ini->ReadString("PRE_PLC_CONNECTION", "PORT2", "6008");
+
+    PLC_IPADDRESS = editPLCIPAddress->Text;
+	PLC_PCPORT = editPLCPortPC->Text.ToIntDef(6007);
+	PLC_PLCPORT = editPLCPortPLC->Text.ToIntDef(6008);
+
+	delete ini;
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::WritePlcInfo()
+{
+	TIniFile *ini;
+
+	AnsiString file;
+	file = (AnsiString)BIN_PATH + "config.inf";
+	ini = new TIniFile(file);
+
+	ini->WriteString("PRE_PLC_CONNECTION", "IP", editPLCIPAddress->Text);
+	ini->WriteString("PRE_PLC_CONNECTION", "PORT1", editPLCPortPC->Text);
+	ini->WriteString("PRE_PLC_CONNECTION", "PORT2", editPLCPortPLC->Text);
+
+	delete ini;
+}
+//---------------------------------------------------------------------------
 bool __fastcall TTotalForm::ReadCellInfo()
 {
 	TIniFile *ini;
@@ -104,6 +139,26 @@ bool __fastcall TTotalForm::ReadCellInfo()
 	tray.lot_number = ini->ReadString("CELL_INFO", "LOT_NUMBER", "-");
 
 	delete ini;
+}
+void __fastcall TTotalForm::CheckMaxValue()
+{
+    int volt = editMaxChargeVolt->Text.ToIntDef(4200);
+    if(volt > 4200) {
+        ShowMessage("Please use Voltage less than 4200mV");
+        editMaxChargeVolt->Text = "4200";
+    }
+
+    int curr = editMaxChargeCurrent->Text.ToIntDef(5000);
+    if(curr > 5000) {
+        ShowMessage("Please use Current less than 5000mA");
+        editMaxChargeCurrent->Text = "5000";
+    }
+
+    int time = editMaxChargeTime->Text.ToIntDef(900);
+    if(time > 900) {
+        ShowMessage("Please use Time less than 900sec");
+        editMaxChargeTime->Text = "900";
+    }
 }
 //---------------------------------------------------------------------------
 // 환경설정 파일 저장 / 읽기

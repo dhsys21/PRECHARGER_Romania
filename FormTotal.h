@@ -375,7 +375,10 @@ private:	// User declarations
 // 肺弊 颇老 包访 积己
 	void __fastcall WriteSystemInfo();
 	bool __fastcall ReadSystemInfo();
+    void __fastcall WritePlcInfo();
+	bool __fastcall ReadPlcInfo();
 	bool __fastcall ReadCellInfo();
+    void __fastcall CheckMaxValue();
 	void __fastcall ErrorLog();
     void __fastcall ErrorMsg(int err);
     void __fastcall WriteCommLog(AnsiString Type, AnsiString Msg);

@@ -66,8 +66,7 @@ void __fastcall TTotalForm::FormShow(TObject *Sender)
 	ReadSystemInfo();
     ReadchannelMapping();
 
-    //* RVMO_main Form에서 처리
-	//Timer_PLCConnect->Enabled = true;
+	Timer_PLCConnect->Enabled = true;
 	config.recontact = true;
 	lblTitle->Caption = "STAGE" + IntToStr(this->Tag+1);
 
@@ -2096,7 +2095,7 @@ void _fastcall TTotalForm::PreChargeSet(int stageno)
             editChargeCurrent->Text = "260";
         }
 
-		int time = editChargeTime->Text.ToIntDef(240);
+		int time = editChargeTime->Text.ToIntDef(120);
         if(time < 30) {
             ShowMessage("Please use Time more than 30sec");
             editChargeTime->Text = "30";
@@ -2104,7 +2103,7 @@ void _fastcall TTotalForm::PreChargeSet(int stageno)
 
 		int max_volt = editMaxChargeVolt->Text.ToIntDef(4200);
 		int max_curr = editMaxChargeCurrent->Text.ToIntDef(5000);
-		int max_time = editMaxChargeTime->Text.ToIntDef(500);
+		int max_time = editMaxChargeTime->Text.ToIntDef(900);
 
 		if(volt >= max_volt) editChargeVolt->Text = FormatFloat("00", max_volt);
 		if(curr >= max_curr) editChargeCurrent->Text = FormatFloat("00", max_curr);
@@ -2188,12 +2187,13 @@ void __fastcall TTotalForm::btnConfigClick(TObject *Sender)
     pnlConfig->BringToFront();
 	pnlConfig->Left = 8;
     pnlConfig->Top = 60;
+    ReadPlcInfo();
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnConnectPLCClick(TObject *Sender)
 {
-    WriteSystemInfo();
-    ReadSystemInfo();
+    WritePlcInfo();
+    ReadPlcInfo();
 	Mod_PLC->Connect(PLC_IPADDRESS, PLC_PLCPORT, PLC_PCPORT);
 }
 //---------------------------------------------------------------------------
@@ -2341,22 +2341,13 @@ void __fastcall TTotalForm::FormClose(TObject *Sender, TCloseAction &Action)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnSaveConfigClick(TObject *Sender)
 {
-    if(BaseForm->StringToDouble(editMaxChargeCurrent->Text, 1200) <= 5000)
-	{
-		if(stage.arl == nLocal && nSection == STEP_WAIT && nStep == 0)
-		{
-			if(MessageBox(Handle, L"Are you sure want to save?", L"SAVE", MB_YESNO|MB_ICONQUESTION) == ID_YES){
-				WriteSystemInfo();
-				WriteRemeasureInfo();
-				ReadSystemInfo();
-			}
-		}
-		else ShowMessage("You can't set up while charging.");
-	}
-//	else
-//	{
-//		ShowMessage("Current can't be set above 3000mA.");
-//	}
+    if(MessageBox(Handle, L"Are you sure want to save?", L"SAVE", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+        WriteSystemInfo();
+        WritePlcInfo();
+        WriteRemeasureInfo();
+        ReadSystemInfo();
+        ReadPlcInfo();
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::btnInitClick(TObject *Sender)

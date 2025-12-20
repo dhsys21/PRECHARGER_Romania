@@ -9,7 +9,7 @@ object BaseForm: TBaseForm
   VertScrollBar.Range = 83
   VertScrollBar.Visible = False
   BorderIcons = [biSystemMenu, biMinimize]
-  Caption = 'Precharger (Ver.251218 004)'
+  Caption = 'Precharger (Ver.251220 002)'
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -532,7 +532,7 @@ object BaseForm: TBaseForm
       ImeName = 'Microsoft Office IME 2007'
       ParentFont = False
       TabOrder = 0
-      Text = '192.168.100.102'
+      Text = '17.91.71.221'
     end
     object Panel25: TPanel
       Left = 10
@@ -584,7 +584,7 @@ object BaseForm: TBaseForm
       ImeName = 'Microsoft Office IME 2007'
       ParentFont = False
       TabOrder = 3
-      Text = '8901'
+      Text = '6007'
     end
     object btnConnectPLC: TAdvSmoothButton
       Left = 264
@@ -692,7 +692,7 @@ object BaseForm: TBaseForm
       ImeName = 'Microsoft Office IME 2007'
       ParentFont = False
       TabOrder = 7
-      Text = '8902'
+      Text = '6008'
     end
     object Memo1: TMemo
       Left = 10
@@ -839,7 +839,6 @@ object BaseForm: TBaseForm
     Fill.ShadowOffset = 0
     Fill.Glow = gmNone
     Version = '1.5.2.1'
-    OnClick = AdvSmoothPanel_PLCClick
     TabOrder = 4
     TMSStyle = 0
   end
@@ -7427,7 +7426,6 @@ object BaseForm: TBaseForm
     Fill.ShadowOffset = 0
     Fill.Glow = gmNone
     Version = '1.5.2.1'
-    OnClick = AdvSmoothPanel_PLCClick
     TabOrder = 9
     TMSStyle = 0
   end
@@ -7467,7 +7465,6 @@ object BaseForm: TBaseForm
     Fill.ShadowOffset = 0
     Fill.Glow = gmNone
     Version = '1.5.2.1'
-    OnClick = AdvSmoothPanel_PLCClick
     TabOrder = 10
     TMSStyle = 0
   end
@@ -7942,7 +7939,6 @@ object BaseForm: TBaseForm
     Fill.ShadowOffset = 0
     Fill.Glow = gmNone
     Version = '1.5.2.1'
-    OnClick = AdvSmoothPanel_PLCClick
     TabOrder = 18
     TMSStyle = 0
   end
@@ -7982,7 +7978,6 @@ object BaseForm: TBaseForm
     Fill.ShadowOffset = 0
     Fill.Glow = gmNone
     Version = '1.5.2.1'
-    OnClick = AdvSmoothPanel_PLCClick
     TabOrder = 19
     TMSStyle = 0
   end

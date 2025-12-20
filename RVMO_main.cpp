@@ -65,7 +65,7 @@ void __fastcall TBaseForm::FormShow(TObject *Sender)
     Form_Language->LanguageChange(0);
 
     ReadSystemInfo();
-    Timer_PLCConnect->Enabled = true;
+    //Timer_PLCConnect->Enabled = true;
 }
 //---------------------------------------------------------------------------
 

@@ -6148,9 +6148,9 @@ object TotalForm: TTotalForm
   end
   object pnlConfig: TAdvSmoothPanel
     Left = 473
-    Top = 230
+    Top = 172
     Width = 448
-    Height = 408
+    Height = 541
     Cursor = crDefault
     CanMove = True
     Caption.Location = plCenterCenter
@@ -6357,7 +6357,7 @@ object TotalForm: TTotalForm
     end
     object btnCloseConnConfig: TAdvSmoothButton
       Left = 363
-      Top = 92
+      Top = 106
       Width = 80
       Height = 50
       Appearance.Font.Charset = DEFAULT_CHARSET
@@ -6394,7 +6394,7 @@ object TotalForm: TTotalForm
     end
     object btnSaveConnConfig: TAdvSmoothButton
       Left = 363
-      Top = 36
+      Top = 43
       Width = 80
       Height = 50
       Appearance.Font.Charset = DEFAULT_CHARSET
@@ -6647,7 +6647,7 @@ object TotalForm: TTotalForm
     end
     object gbPlcConnection: TGroupBox
       Left = 7
-      Top = 422
+      Top = 400
       Width = 350
       Height = 130
       Caption = 'PLC CONNECTION'
@@ -6660,7 +6660,7 @@ object TotalForm: TTotalForm
       TabOrder = 4
       object editPLCIPAddress: TEdit
         Left = 103
-        Top = 33
+        Top = 34
         Width = 160
         Height = 24
         Alignment = taCenter
@@ -6672,7 +6672,7 @@ object TotalForm: TTotalForm
         ImeName = 'Microsoft Office IME 2007'
         ParentFont = False
         TabOrder = 0
-        Text = '192.168.100.101'
+        Text = '17.91.71.221'
       end
       object Panel2: TPanel
         Left = 15
@@ -6816,7 +6816,7 @@ object TotalForm: TTotalForm
         ImeName = 'Microsoft Office IME 2007'
         ParentFont = False
         TabOrder = 6
-        Text = '8901'
+        Text = '6007'
       end
       object editPLCPortPLC: TEdit
         Left = 103
@@ -6832,7 +6832,7 @@ object TotalForm: TTotalForm
         ImeName = 'Microsoft Office IME 2007'
         ParentFont = False
         TabOrder = 7
-        Text = '8902'
+        Text = '6008'
       end
     end
     object GroupBox1: TGroupBox
