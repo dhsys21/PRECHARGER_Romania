@@ -1769,7 +1769,7 @@ object MeasureInfoForm: TMeasureInfoForm
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 0
-      OnClick = GroupBox3Click
+      OnDblClick = GroupBox3DblClick
       object btnAuto: TAdvSmoothButton
         Left = 29
         Top = 125
@@ -2280,11 +2280,12 @@ object MeasureInfoForm: TMeasureInfoForm
         Status.Appearance.Font.Name = 'Tahoma'
         Status.Appearance.Font.Style = []
         BevelColor = clMedGray
-        Caption = '-'
+        Caption = 'SEQ:STEP'
         Color = clWhite
         ParentFont = False
         TabOrder = 13
         Version = '2.1.1.5'
+        OnClick = AdvSmoothButton2Click
         TMSStyle = 8
       end
     end

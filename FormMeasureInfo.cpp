@@ -493,12 +493,6 @@ void __fastcall TMeasureInfoForm::btnSetPrechargerClick(TObject *Sender)
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TMeasureInfoForm::GroupBox3Click(TObject *Sender)
-{
-    if(GroupBox3->Height == 456) GroupBox3->Height = 230;
-    else GroupBox3->Height = 456;
-}
-//---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::btnRBTClick(TObject *Sender)
 {
     if(MessageBox(Handle, Form_Language->msgRbt.c_str(), L"", MB_YESNO|MB_ICONQUESTION) == ID_YES){
@@ -682,4 +676,17 @@ void __fastcall TMeasureInfoForm::initChart(int volt, int curr)
 }
 //---------------------------------------------------------------------------
 
+
+void __fastcall TMeasureInfoForm::GroupBox3DblClick(TObject *Sender)
+{
+    if(GroupBox3->Height == 456) GroupBox3->Height = 230;
+    else GroupBox3->Height = 456;
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TMeasureInfoForm::AdvSmoothButton2Click(TObject *Sender)
+{
+    BaseForm->nForm[stage]->CmdCheckStep(1);
+}
+//---------------------------------------------------------------------------
 

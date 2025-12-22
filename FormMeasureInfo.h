@@ -126,7 +126,6 @@ __published:	// IDE-managed Components
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnResetClick(TObject *Sender);
 	void __fastcall btnSetPrechargerClick(TObject *Sender);
-	void __fastcall GroupBox3Click(TObject *Sender);
 	void __fastcall btnRBTClick(TObject *Sender);
 	void __fastcall btnReportClick(TObject *Sender);
 	void __fastcall btnCALClick(TObject *Sender);
@@ -138,6 +137,8 @@ __published:	// IDE-managed Components
 	void __fastcall Timer_SetStep2Timer(TObject *Sender);
 	void __fastcall btnCLSClick(TObject *Sender);
 	void __fastcall btnIDNClick(TObject *Sender);
+	void __fastcall GroupBox3DblClick(TObject *Sender);
+	void __fastcall AdvSmoothButton2Click(TObject *Sender);
 
 private:	// User declarations
 	void __fastcall MakePanel(AnsiString type);

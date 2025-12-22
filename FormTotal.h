@@ -466,6 +466,7 @@ public:		// User declarations
     void __fastcall CmdSTC();
     void __fastcall CmdCLS();
     void __fastcall CmdBID();
+    void __fastcall CmdCheckStep(int step);
 
 	AnsiString __fastcall GetCodeColor(TPanel *pnl, int index);
 	AnsiString __fastcall GetCodeColor2(TPanel *pnl, int index);

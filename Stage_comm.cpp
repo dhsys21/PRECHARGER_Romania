@@ -287,7 +287,7 @@ void __fastcall TTotalForm::CmdReport()
 void __fastcall TTotalForm::CmdSetStep()
 {
     AnsiString CMD = "";
-    AnsiString cTime, cCurr, cVolt, cPrechargeTime;
+    AnsiString cTime, cCurr, cVolt, cPrechargeTime, cPreCurr;
 
     //* settle time : precharge2 시작할 때 충전전류를 흘리기 전 검사시간 약 7초
     //* charge 명령은 약 15초 정도 걸림
@@ -298,6 +298,9 @@ void __fastcall TTotalForm::CmdSetStep()
     cTime = config.time + SETTLETIME;
 	cCurr = convertCondition2(config.curr);
 	cVolt = convertCondition2(config.volt);
+
+    if(config.curr > 1000) cPreCurr = "1.0";
+	else cPreCurr = cCurr;
 /* 조건 예시
     // "SEQ:TEST:DEF 1,2,2,VOLT_LE,0.1,BEFORE,90,FAIL";  // 100mV
     // "SEQ:TEST:DEF 1,2,1,CURR_LE,0.01,BEFORE,60,FAIL"; // 10mA
@@ -349,6 +352,14 @@ void __fastcall TTotalForm::CmdDischargeSetStep()
     CMD = "TRB" + CMD + "\n";
     SendData(CMD);
     LASTCMD = "DEF";
+}
+//---------------------------------------------------------------------------
+void __fastcall TTotalForm::CmdCheckStep(int step)
+{
+	AnsiString CMD = "SEQ:STEP:DEF? 1," + IntToStr(step);
+	CMD = "TRB" + CMD + "\n";
+	SendData(CMD);
+	LASTCMD = "STEP";
 }
 //---------------------------------------------------------------------------
 // 컨트롤러 명령어
