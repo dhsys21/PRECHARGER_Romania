@@ -63,6 +63,7 @@ void __fastcall TTotalForm::FormShow(TObject *Sender)
 	stage.init = true;
     stage.arl = nAuto;
 
+    ReadPlcInfo();
 	ReadSystemInfo();
     ReadchannelMapping();
 
