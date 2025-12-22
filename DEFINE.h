@@ -76,7 +76,7 @@ const int LINECOUNT		= 20;
 //	BT 2202A 변수
 // SETTLETIME : precharge2 시작 후 실제 전류 흘리기 전까지 검사시간
 //---------------------------------------------------------------------------
-const int SETTLETIME    =   7;
+const int SETTLETIME    =   0;
 const int PRECHARGETIME =   10;
 
 const int SEND 			= 1;

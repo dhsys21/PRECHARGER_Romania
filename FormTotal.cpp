@@ -367,7 +367,7 @@ void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
 	{
 		Panel_State->Color = clRed;
 		Panel_State->Font->Color = clWhite;
-		Mod_PLC->SetValue(this->Tag, PC_D_PRE_ERROR, 1);
+//		Mod_PLC->SetValue(this->Tag, PC_D_PRE_ERROR, 1);
 		return;
 	}
 	else
@@ -377,7 +377,7 @@ void __fastcall TTotalForm::Timer_AutoInspectionTimer(TObject *Sender)
 		Panel_State->Font->Color = clBlack;
 
 		BaseForm->advPLCInterfaceShow->Color = clWhite;
-        Mod_PLC->SetValue(this->Tag, PC_D_PRE_ERROR, 0);
+//        Mod_PLC->SetValue(this->Tag, PC_D_PRE_ERROR, 0);
 	}
 
 	if(stage.arl == nAuto && BaseForm->nForm[this->Tag]->Client->Active == true)
@@ -407,6 +407,7 @@ bool __fastcall TTotalForm::ErrorCheck()
 	{
         ErrorCheckStatus = "PRECHARGER Connection Fail.";
         DisplayError(ErrorCheckStatus, true);
+        Mod_PLC->SetValue(this->Tag, PC_D_PRE_ERROR, 1);
 
         if(ReContactTimer->Enabled == false)
         	ReContactTimer->Enabled = true;
@@ -417,6 +418,7 @@ bool __fastcall TTotalForm::ErrorCheck()
     {
         ErrorCheckStatus = "BT Connection Fail.";
         DisplayError(ErrorCheckStatus, true);
+        Mod_PLC->SetValue(this->Tag, PC_D_PRE_ERROR, 1);
 
 		DisplayStatus(nNoAnswer);
 		return true;
@@ -431,6 +433,7 @@ bool __fastcall TTotalForm::ErrorCheck()
     	&& (stage.status == WDT || stage.status == REC)){
         ErrorCheckStatus = "PRECHARGER is WDT Mode. Please [RESET] it.";
         DisplayError(ErrorCheckStatus, true);
+        Mod_PLC->SetValue(this->Tag, PC_D_PRE_ERROR, 1);
         return true;
     }
 
@@ -438,6 +441,7 @@ bool __fastcall TTotalForm::ErrorCheck()
 		|| charge[1].volt == 0 || charge[1].curr == 0 || charge[1].time == 0){
         ErrorCheckStatus = "No Setting Values.";
         DisplayError(ErrorCheckStatus, true);
+        Mod_PLC->SetValue(this->Tag, PC_D_PRE_ERROR, 1);
         return true;
     }
 
@@ -463,7 +467,7 @@ bool __fastcall TTotalForm::ErrorCheck()
 		}
         BaseForm->advPLCInterfaceShow->Color = clRed;
 
-//		return true;
+		return true;
 	}
 
 	return false;

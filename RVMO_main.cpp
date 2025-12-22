@@ -128,6 +128,14 @@ void __fastcall TBaseForm::ClockTimerTimer(TObject *Sender)
         }
 	}
 
+    // stage1, stage2
+	if(Mod_PLC->GetValue(0, PLC_D_PRE_ERROR) == 1 || Mod_PLC->GetValue(0, PC_D_PRE_ERROR) == 1)
+		advPLCInterfaceShow->Color = poff->Color;
+	else if(Mod_PLC->GetValue(1, PLC_D_PRE_ERROR) == 1 || Mod_PLC->GetValue(1, PC_D_PRE_ERROR) == 1)
+		advPLCInterfaceShow->Color = poff->Color;
+	else
+        advPLCInterfaceShow->Color = clWhite;
+
     if(nForm[0]->Client->Active == true)
         SetColorPanel(pnlCONT, true);
     else
@@ -139,7 +147,7 @@ void __fastcall TBaseForm::ClockTimerTimer(TObject *Sender)
         SetColorPanel(pnlCONT2, false);
 
 	if(Now().FormatString("hhnn") == "0700") {
-		DeleteDay = 90;	// 12시가 되면 DeleteDay를 90으로 초기화
+		DeleteDay = 180;	// 12시가 되면 DeleteDay를 90으로 초기화
 	}
 }
 //---------------------------------------------------------------------------

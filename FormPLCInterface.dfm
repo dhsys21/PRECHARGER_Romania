@@ -188,7 +188,7 @@ object Form_PLCInterface: TForm_PLCInterface
     Fill.Rounding = 5
     Fill.ShadowOffset = 0
     Fill.Glow = gmNone
-    Version = '1.7.1.2'
+    Version = '1.5.2.1'
     Visible = False
     TabOrder = 1
     TMSStyle = 0
@@ -229,7 +229,6 @@ object Form_PLCInterface: TForm_PLCInterface
       Appearance.Font.Name = 'Tahoma'
       Appearance.Font.Style = [fsBold]
       Appearance.Spacing = 0
-      Appearance.SimpleLayout = False
       Appearance.Rounding = 3
       Appearance.WordWrapping = False
       Status.Caption = '0'
@@ -253,7 +252,7 @@ object Form_PLCInterface: TForm_PLCInterface
       ParentFont = False
       TabOrder = 0
       Visible = False
-      Version = '2.2.1.4'
+      Version = '2.1.1.5'
       TMSStyle = 8
     end
     object Panel30: TPanel
@@ -403,7 +402,7 @@ object Form_PLCInterface: TForm_PLCInterface
         Text = '1'
       end
       object btnWriteValue: TButton
-        Left = 159
+        Left = 161
         Top = 40
         Width = 66
         Height = 36

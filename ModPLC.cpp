@@ -556,7 +556,16 @@ double __fastcall TMod_PLC::GetCellSrialValue(int stageno, int plc_address)
 //---------------------------------------------------------------------------
 void __fastcall TMod_PLC::SetValue(int stageno, int pc_address, int value)
 {
-    SetDouble(pc_Interface_Data[stageno],  pc_address, value);
+    //SetDouble(pc_Interface_Data[stageno],  pc_address, value);
+    int pcerror = 0;
+	SetDouble(pc_Interface_Data[stageno],  pc_address, value);
+	if(pc_address == PC_D_PRE_ERROR){
+		pcerror = GetValue(stageno, PC_D_PRE_ERROR);
+		if(value == 1)
+			BaseForm->nForm[stageno]->WritePLCLog("PC ERROR ON", "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM[stageno] + PC_D_PRE_ERROR) + " PC ERROR #" + IntToStr(stageno + 1));
+		else if(pcerror == 1 && value == 0)
+			BaseForm->nForm[stageno]->WritePLCLog("PC ERROR OFF", "D" + IntToStr(PC_D_INTERFACE_START_DEV_NUM[stageno] + PC_D_PRE_ERROR) + " PC ERROR #" + IntToStr(stageno + 1));
+	}
 }
 //---------------------------------------------------------------------------
 double __fastcall TMod_PLC::GetValue(int stageno, int pc_address)
