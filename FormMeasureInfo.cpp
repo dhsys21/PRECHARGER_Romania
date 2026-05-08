@@ -592,7 +592,7 @@ void __fastcall TMeasureInfoForm::Timer_SetStepTimer(TObject *Sender)
 		    bErrorFlag = false;
             LAST_STEP_BEFORE_99 = 1;
 
-            BaseForm->nForm[stage]->CmdSetStep2();
+            BaseForm->nForm[stage]->CmdSetStep();
             nStep = 99;
             nSetCount = 0;
         	break;
