@@ -1012,31 +1012,31 @@ void __fastcall TTotalForm::StageStatus()
 			stage.alarm_cnt = 0;
 			break;
 		case nIN:
-			if(stage.alarm_cnt > 100){
+			if(stage.alarm_cnt > 1000){
 				ErrorMsg(nRedEnd);
 				stage.alarm_cnt = 0;
 			}
 			break;
 		case nREADY:
-			if(stage.alarm_cnt > 100){
+			if(stage.alarm_cnt > 1000){
 				ErrorMsg(nReadyError);
 				stage.alarm_cnt = 0;
 			}
 			break;
 		case nRUN:
-			if(stage.alarm_cnt > 300){
+			if(stage.alarm_cnt > 3000){
 				ErrorMsg(nRunningError);
 				stage.alarm_cnt = 0;
 			}
 			break;
 		case nEND:
-			if(stage.alarm_cnt > 100){
+			if(stage.alarm_cnt > 1000){
 				ErrorMsg(nBlueEnd);
 				stage.alarm_cnt = 0;
 			}
 			break;
 		case nFinish:
-            if(stage.alarm_cnt > 100){
+            if(stage.alarm_cnt > 1000){
 				ErrorMsg(nFinishError);
 				stage.alarm_cnt = 0;
 			}
@@ -1795,28 +1795,41 @@ void __fastcall TTotalForm::SET_SENDATA(AnsiString eqstatus, AnsiString runcount
 void __fastcall TTotalForm::ProcessRPY(AnsiString param, int stageno)
 {
     LASTRESPONSE = param;
+    bool isNoError = (param.Pos("No error") > 0);
+    // 1. 에러 체크 (하나라도 에러면 기록은 해둠)
+    if(!isNoError) {
+        MeasureInfoForm->bErrorFlag = true;
+    }
+    // 2. 이미 처리된 스텝이면 무시 (중복 응답 방지)
+    if(MeasureInfoForm->bStepProcessed) return;
 
     if(LASTCMD == "REP"){
         SetFinalResult(param);
-    } else if(LASTCMD == "SET"){
-        if(param.Pos("No error") > 0)
-            MeasureInfoForm->nSetStep = 1; // check setup
-		else{
-			MeasureInfoForm->nSetStep = 4; // reset -> show error
-            if(Form_ErrorReset->Visible == false)
-            	Form_ErrorReset->DisplayErrorMessage(stageno);
-            //ShowMessage("Please [RESET] equipment first and retry it");
-		}
-    } else if(LASTCMD == "ENA"){
-		if(param.Pos("No error"))
-            MeasureInfoForm->nSetStep = 4; // end
-		else /*if(param.Pos("-1001") > 0)*/{
-			MeasureInfoForm->nSetStep = 4; // reset -> show error
-            if(Form_ErrorReset->Visible == false)
-            	Form_ErrorReset->DisplayErrorMessage(stageno);
-			//ShowMessage("Please [RESET] equipment first and retry it");
-		}
+    }
+    else if(LASTCMD == "SET"){
+        MeasureInfoForm->bStepProcessed = true; // 이후 오는 응답은 차단
 
+        if(isNoError) MeasureInfoForm->nStep = 2;
+        else MeasureInfoForm->nStep = 4;
+    }
+    else if(LASTCMD == "ENA"){
+        MeasureInfoForm->bStepProcessed = true;
+
+        if(isNoError) {
+            if(MeasureInfoForm->LAST_STEP_BEFORE_99 == 0) MeasureInfoForm->nStep = 1;
+            else MeasureInfoForm->nStep = 3;
+        } else {
+            MeasureInfoForm->nStep = 10; // 리셋으로
+        }
+    }
+    else if(LASTCMD == "RST") {
+        MeasureInfoForm->bStepProcessed = true;
+
+        if(isNoError) {
+            MeasureInfoForm->nStep = 1;
+        } else {
+            MeasureInfoForm->nStep = 4; // 에러 종료
+        }
     }
 }
 //---------------------------------------------------------------------------

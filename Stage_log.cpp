@@ -154,11 +154,11 @@ void __fastcall TTotalForm::CheckMaxValue()
         editMaxChargeCurrent->Text = "5000";
     }
 
-    int time = editMaxChargeTime->Text.ToIntDef(900);
-    if(time > 900) {
-        ShowMessage("Please use Time less than 900sec");
-        editMaxChargeTime->Text = "900";
-    }
+//    int time = editMaxChargeTime->Text.ToIntDef(900);
+//    if(time > 900) {
+//        ShowMessage("Please use Time less than 900sec");
+//        editMaxChargeTime->Text = "900";
+//    }
 }
 //---------------------------------------------------------------------------
 // 환경설정 파일 저장 / 읽기

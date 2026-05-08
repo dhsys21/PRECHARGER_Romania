@@ -156,6 +156,12 @@ public:		// User declarations
     int nStep;
     int nSetStep;
     int nSetCount;
+    int nRStepCount;          // 리셋 대기 시간 카운터 (초 단위)
+    int LAST_STEP_BEFORE_99;  // 99번(대기) 상태로 가기 직전의 스텝 번호 저장
+
+    //* 응답확인
+    bool bStepProcessed;  // 이번 스텝의 응답을 이미 처리했는지 여부
+    bool bErrorFlag;      // 에러 발생 여부
     void __fastcall SetStep(int stageno);
 
     bool n_bManualStart;

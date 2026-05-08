@@ -245,10 +245,8 @@ __published:	// IDE-managed Components
 	TPanel *Panel63;
 	TPanel *pOcvValue;
 	TGroupBox *GroupBox2;
-	TPanel *Panel1;
 	TEdit *editCurrentMin;
 	TPanel *pnlCurrMin;
-	TEdit *editCurrMin;
 	TAdvSmoothButton *btnSaveConfig;
 	TAdvSmoothPanel *pnlMessageBox;
 	TLabel *Label_Title;
@@ -256,6 +254,8 @@ __published:	// IDE-managed Components
 	TButton *btnYes;
 	TButton *btnNo;
 	TAdvSmoothPanel *AdvSmoothPanel1;
+	TPanel *Panel1;
+	TEdit *editCurrMin;
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall btnSaveConfigClick(TObject *Sender);
 	void __fastcall BitmapBtn5Click(TObject *Sender);
@@ -459,6 +459,7 @@ public:		// User declarations
     void __fastcall CmdEna();
 	void __fastcall CmdStop();
     void __fastcall CmdSetStep();
+    void __fastcall CmdSetStep2();
     void __fastcall CmdDischargeSetStep();
     bool __fastcall CmdCheckSet();
     void __fastcall CmdReport();

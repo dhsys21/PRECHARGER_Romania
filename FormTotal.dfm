@@ -1418,8 +1418,8 @@ object TotalForm: TTotalForm
     object StatusImage: TImage
       Left = 2
       Top = 23
-      Width = 446
-      Height = 279
+      Width = 346
+      Height = 265
       Align = alClient
       AutoSize = True
       Center = True
@@ -2365,8 +2365,6 @@ object TotalForm: TTotalForm
         050068E8FF00F214B3FF0079BFA57E91E13FFC97FC2BFF00632C3FFE9E91E6E6
         BFEE388FF09EFC9F757FDD5FE42BFD9EA7FC3A7FE087FE928FCA1EEFD5FE67FF
         D9}
-      ExplicitWidth = 346
-      ExplicitHeight = 265
     end
   end
   object GrpError: TGroupBox
@@ -5001,8 +4999,8 @@ object TotalForm: TTotalForm
     object Image5: TImage
       Left = 4
       Top = 25
-      Width = 442
-      Height = 275
+      Width = 346
+      Height = 265
       Align = alClient
       AutoSize = True
       Center = True
@@ -5796,8 +5794,6 @@ object TotalForm: TTotalForm
         00500140050014005001401EB9F023FE4ABF833FEC336BFF00A11AF9ECFBFDC7
         30FF00B069FF00E9076659FEFD1F589FD185BFFC7BC1FF005C62FF00D016BF99
         E3F0AF45F91FAAC7E18FA2FC8FFFD9}
-      ExplicitWidth = 346
-      ExplicitHeight = 265
     end
     object localTest: TAdvSmoothButton
       Left = 248
@@ -6149,8 +6145,8 @@ object TotalForm: TTotalForm
   object pnlConfig: TAdvSmoothPanel
     Left = 473
     Top = 172
-    Width = 448
-    Height = 541
+    Width = 498
+    Height = 480
     Cursor = crDefault
     CanMove = True
     Caption.Location = plCenterCenter
@@ -6356,10 +6352,10 @@ object TotalForm: TTotalForm
       end
     end
     object btnCloseConnConfig: TAdvSmoothButton
-      Left = 363
+      Left = 390
       Top = 106
-      Width = 80
-      Height = 50
+      Width = 90
+      Height = 60
       Appearance.Font.Charset = DEFAULT_CHARSET
       Appearance.Font.Color = clWindowText
       Appearance.Font.Height = -17
@@ -6393,10 +6389,10 @@ object TotalForm: TTotalForm
       TMSStyle = 8
     end
     object btnSaveConnConfig: TAdvSmoothButton
-      Left = 363
+      Left = 390
       Top = 43
-      Width = 80
-      Height = 50
+      Width = 90
+      Height = 60
       Appearance.Font.Charset = DEFAULT_CHARSET
       Appearance.Font.Color = clWindowText
       Appearance.Font.Height = -17
@@ -6431,9 +6427,9 @@ object TotalForm: TTotalForm
     end
     object gbEtc: TGroupBox
       Left = 7
-      Top = 203
-      Width = 350
-      Height = 193
+      Top = 342
+      Width = 482
+      Height = 130
       Caption = 'ETC'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
@@ -6562,9 +6558,9 @@ object TotalForm: TTotalForm
         end
       end
       object Panel28: TPanel
-        Left = 12
-        Top = 133
-        Width = 184
+        Left = 222
+        Top = 45
+        Width = 170
         Height = 24
         Margins.Top = 5
         Margins.Bottom = 5
@@ -6585,8 +6581,8 @@ object TotalForm: TTotalForm
         TabOrder = 1
       end
       object editNGAlarmCount: TEdit
-        Left = 198
-        Top = 133
+        Left = 392
+        Top = 45
         Width = 75
         Height = 24
         Margins.Bottom = 0
@@ -6603,9 +6599,9 @@ object TotalForm: TTotalForm
         OnMouseDown = editChargeTimeMouseDown
       end
       object Panel15: TPanel
-        Left = 12
-        Top = 160
-        Width = 184
+        Left = 222
+        Top = 70
+        Width = 170
         Height = 24
         Margins.Top = 5
         Margins.Bottom = 5
@@ -6615,7 +6611,7 @@ object TotalForm: TTotalForm
         Color = 15658734
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -13
+        Font.Height = -11
         Font.Name = 'Tahoma'
         Font.Style = [fsBold]
         Padding.Top = 5
@@ -6626,8 +6622,8 @@ object TotalForm: TTotalForm
         TabOrder = 3
       end
       object editRemeasureAlarmCount: TEdit
-        Left = 198
-        Top = 160
+        Left = 392
+        Top = 70
         Width = 75
         Height = 24
         Alignment = taCenter
@@ -6644,10 +6640,52 @@ object TotalForm: TTotalForm
         Text = '5'
         OnMouseDown = editChargeTimeMouseDown
       end
+      object Panel1: TPanel
+        Left = 222
+        Top = 95
+        Width = 170
+        Height = 24
+        Margins.Top = 5
+        Margins.Bottom = 5
+        BevelKind = bkFlat
+        BevelOuter = bvNone
+        Caption = 'Current Min. (mA)'
+        Color = 15658734
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Padding.Top = 5
+        ParentBackground = False
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = False
+        TabOrder = 5
+        Visible = False
+      end
+      object editCurrMin: TEdit
+        Left = 392
+        Top = 95
+        Width = 78
+        Height = 24
+        Margins.Bottom = 0
+        Alignment = taCenter
+        AutoSize = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 6
+        Text = '50'
+        Visible = False
+      end
     end
     object gbPlcConnection: TGroupBox
       Left = 7
-      Top = 400
+      Top = 142
       Width = 350
       Height = 130
       Caption = 'PLC CONNECTION'
@@ -6837,7 +6875,7 @@ object TotalForm: TTotalForm
     end
     object GroupBox1: TGroupBox
       Left = 7
-      Top = 142
+      Top = 278
       Width = 350
       Height = 58
       Caption = 'MODEL NAME'
@@ -6879,30 +6917,6 @@ object TotalForm: TTotalForm
       Font.Style = [fsBold]
       ParentFont = False
       TabOrder = 6
-      object Panel1: TPanel
-        Left = 5
-        Top = 57
-        Width = 184
-        Height = 24
-        Margins.Top = 5
-        Margins.Bottom = 5
-        BevelKind = bkFlat
-        BevelOuter = bvNone
-        Caption = 'Current Min. (mA)'
-        Color = 15658734
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -13
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        Padding.Top = 5
-        ParentBackground = False
-        ParentFont = False
-        ParentShowHint = False
-        ShowHint = False
-        TabOrder = 0
-        Visible = False
-      end
       object editCurrentMin: TEdit
         Left = 195
         Top = 26
@@ -6918,7 +6932,7 @@ object TotalForm: TTotalForm
         ImeName = 'Microsoft Office IME 2007'
         NumbersOnly = True
         ParentFont = False
-        TabOrder = 1
+        TabOrder = 0
         Text = '50'
         Visible = False
       end
@@ -6943,25 +6957,7 @@ object TotalForm: TTotalForm
         ParentFont = False
         ParentShowHint = False
         ShowHint = False
-        TabOrder = 2
-        Visible = False
-      end
-      object editCurrMin: TEdit
-        Left = 195
-        Top = 57
-        Width = 78
-        Height = 24
-        Margins.Bottom = 0
-        Alignment = taCenter
-        AutoSize = False
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -13
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentFont = False
-        TabOrder = 3
-        Text = '50'
+        TabOrder = 1
         Visible = False
       end
       object btnSaveConfig: TAdvSmoothButton
@@ -6996,7 +6992,7 @@ object TotalForm: TTotalForm
         Caption = 'Save '
         Color = clWhite
         ParentFont = False
-        TabOrder = 4
+        TabOrder = 2
         Visible = False
         Version = '2.1.1.5'
         OnClick = btnSaveConfigClick
@@ -7128,8 +7124,8 @@ object TotalForm: TTotalForm
       object Label_Msg: TLabel
         Left = 0
         Top = 3
-        Width = 396
-        Height = 47
+        Width = 50
+        Height = 16
         Align = alClient
         Alignment = taCenter
         Caption = 'Message'
@@ -7140,8 +7136,6 @@ object TotalForm: TTotalForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
-        ExplicitWidth = 50
-        ExplicitHeight = 16
       end
     end
   end

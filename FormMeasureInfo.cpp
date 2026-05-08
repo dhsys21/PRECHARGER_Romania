@@ -568,7 +568,7 @@ void __fastcall TMeasureInfoForm::SetStep(int stageno)
      nSetStep = 0;
      nSetCount = 0;
      stage = stageno;
-     MeasureInfoForm->Timer_SetStep2->Enabled = true;
+     MeasureInfoForm->Timer_SetStep->Enabled = true;
 }
 //---------------------------------------------------------------------------
 void __fastcall TMeasureInfoForm::Timer_SetStepTimer(TObject *Sender)
@@ -576,29 +576,86 @@ void __fastcall TMeasureInfoForm::Timer_SetStepTimer(TObject *Sender)
     nSetCount++;
     switch(nStep)
     {
-        case 0:
-            BaseForm->nForm[stage]->CmdSetStep();
-            nStep = 99;
-        	break;
-        case 1:
-            if(BaseForm->nForm[stage]->CmdCheckSet() == true)
-                nStep = 2; // Ena
-            else
-                nStep = 0; // re-set
-            break;
-        case 2: // Ena
+        case 0: // [ENA 명령 단계]
+            bStepProcessed = false; // 새로운 명령이므로 처리 플래그 리셋
+    		bErrorFlag = false;
+            LAST_STEP_BEFORE_99 = 0; // 책갈피: 0번에서 보냄
+
             BaseForm->nForm[stage]->CmdEna();
+            nStep = 99; // ProcessRPY의 응답을 기다림
+            nSetCount = 0;
             break;
+
+        case 1:
+            BaseForm->nForm[stage]->pnlResetMsg->Visible = false; // 혹시 켜져있으면 끄기
+            bStepProcessed = false; // 새로운 명령이므로 처리 플래그 리셋
+		    bErrorFlag = false;
+            LAST_STEP_BEFORE_99 = 1;
+
+            BaseForm->nForm[stage]->CmdSetStep2();
+            nStep = 99;
+            nSetCount = 0;
+        	break;
+
+        case 2: // [다음 설정 단계]
+            if(BaseForm->nForm[stage]->CmdCheckSet() == true){
+                bStepProcessed = false;
+        		bErrorFlag = false;
+                LAST_STEP_BEFORE_99 = 2; // 책갈피: 2번(최종 ENA)에서 보냄
+
+                BaseForm->nForm[stage]->CmdEna();
+                nStep = 99;
+                nSetCount = 0;
+            }
+            if(nSetCount > 5){
+                nStep = 4;
+            }
+            break;
+
         case 3:
-            //BaseForm->nForm[stage]->CmdResetTimer();
-            //* error display
-            Form_Error->DisplayErrorMessage(this->Tag, nResetErr);
-            Form_Error->Tag = this->Tag;
-            break;
-        case 4:
             Timer_SetStep->Enabled = false;
             nStep = 0;
             break;
+
+        case 4: // [에러 표시 단계]
+            Timer_SetStep->Enabled = false;
+            Form_Error->DisplayErrorMessage(this->Tag, nResetErr);
+            nStep = 0;
+            break;
+
+        case 10: // [자동 리셋 단계] - 1차 ENA에서 에러 발생 시 진입
+            bStepProcessed = false; // 새로운 명령이므로 처리 플래그 리셋
+            bErrorFlag = false;
+            BaseForm->nForm[stage]->CmdReset();
+            BaseForm->nForm[stage]->pnlStatus->Caption = "";
+            nRStepCount = 0; // 리셋 초 카운트 초기화
+            nStep = 11;      // 리셋 대기 단계로 이동
+            break;
+
+        case 11: // [리셋 완료 대기 - 약 10~15초]
+            nRStepCount++;
+            BaseForm->nForm[stage]->pnlResetMsg->Visible = true;
+            BaseForm->nForm[stage]->pnlResetMsg->Caption = "Resetting... Please wait (" + IntToStr(nRStepCount) + ")";
+
+            // 리셋 완료 조건: 5초 이상 경과 + 장비 상태가 IDL 또는 RUN일 때
+            // 혹은 응답 패킷에서 리셋 완료 메시지가 올 때까지 대기
+            if(nRStepCount > 7 && (BaseForm->nForm[stage]->pnlStatus->Caption == "IDL" || BaseForm->nForm[stage]->pnlStatus->Caption == "RUN")) {
+                BaseForm->nForm[stage]->pnlResetMsg->Visible = false;
+                nStep = 1; // 리셋 성공했으니 바로 Setting 단계로!
+                nSetCount = 0;
+            }
+            else if(nRStepCount > 15) { // 15초 타임아웃
+                BaseForm->nForm[stage]->pnlResetMsg->Visible = false;
+                nStep = 4; // 에러 단계로
+            }
+            break;
+
+        case 99: // [비동기 응답 대기 및 타임아웃]
+            if(nSetCount > 20) { // 타임아웃(약 2~4초)
+                nStep = 4; // 응답 없으면 에러 종료
+            }
+            break;
+
         default:
             break;
     }
