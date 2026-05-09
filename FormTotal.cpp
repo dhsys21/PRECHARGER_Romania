@@ -1095,9 +1095,10 @@ void __fastcall TTotalForm::DisplayChannelInfo()
 				//* 2024 04 10 충전종료에러 때문에 조건 수정
 				//* volt, curr -> final_volt, final_curr
 				//* 10, 1000 => 100, 500
-                    double current = BaseForm->StringToDouble(real_data.final_curr[i], 0);
+                    double f_volt = BaseForm->StringToDouble(real_data.final_volt[i], 0);
+                    double f_curr = BaseForm->StringToDouble(real_data.final_curr[i], 0);
 					if(real_data.final_result[i] == "0" || real_data.final_result[i] == "2"
-						|| (fabs(current) < 100 && real_data.final_volt[i] < 500)){
+						|| (fabs(f_curr) < 100 && f_volt < 500)){
 						//* 결과 NG
 						panel[i]->Color = cl_error->Color;
       				}
@@ -1113,33 +1114,56 @@ void __fastcall TTotalForm::DisplayChannelInfo()
                     m_sTempVlot[i] = "0.0";
                 }
                 else{
-                    if(real_data.final_volt[i] != "") m_sTempVlot[i] = real_data.final_volt[i];
-					if(real_data.final_curr[i] != "") m_sTempCurr[i] = real_data.final_curr[i];
+                    if(real_data.final_volt[i] != "" && real_data.final_volt[i] != "0")
+                        m_sTempVlot[i] = real_data.final_volt[i];
+                    if(real_data.final_curr[i] != "" && real_data.final_curr[i] != "0")
+                        m_sTempCurr[i] = real_data.final_curr[i];
                 }
 			}
 			else if(tray.ams)
 			{
 				 if(m_sTempCurr[i] != "Cell"){
-                     m_sTempVlot[i] = real_data.final_volt[i];
-                     if(real_data.status[i] > -2 && BaseForm->StringToDouble(real_data.volt[i],0) > 100){
-                        //m_sTempVlot[i] = real_data.volt[i];
-                        m_sTempCurr[i] = real_data.curr[i];
+                    if(real_data.status[i] > -2) // 상태가 정상일 때
+                    {
+                        double currentVolt = BaseForm->StringToDouble(real_data.volt[i], 0);
+                        double currentCurr = BaseForm->StringToDouble(real_data.curr[i], 0);
 
-                        if(LimitVolt[i].ToDouble() < real_data.volt[i].ToDouble())
-                            LimitVolt[i] = real_data.volt[i];
+                        // --- [전압 업데이트 조건] ---
+                        // 실시간 전압이 정상(100 이상)일 때만 업데이트 및 피크값 유지
+                        if(currentVolt > 100)
+                        {
+                            m_sTempVlot[i] = real_data.volt[i];
+                            if(LimitVolt[i].ToDouble() < currentVolt)
+                                LimitVolt[i] = real_data.volt[i];
+                        }
+                        else
+                        {
+                            // 전압이 0으로 튀었다면? 기존에 저장된 final_volt를 보여줌 (유지)
+                            if(real_data.final_volt[i] != "" && real_data.final_volt[i] != "0")
+                                m_sTempVlot[i] = real_data.final_volt[i];
+                        }
 
-                        if(LimitCurr[i].ToDouble() < real_data.curr[i].ToDouble())
-                            LimitCurr[i] = real_data.curr[i];
-                     }
-                     else{
-                        //m_sTempVlot[i] = real_data.volt[i];
-                        //m_sTempCurr[i] = real_data.curr[i];
+                        // --- [전류 업데이트 조건] ---
+                        // 전류는 0이 오더라도 실시간으로 보여주거나, 충전 중(10 이상)일 때 업데이트
+                        if(fabs(currentCurr) > 10) // 어느 정도 전류가 흐를 때
+                        {
+                            m_sTempCurr[i] = real_data.curr[i];
+                            if(LimitCurr[i].ToDouble() < fabs(currentCurr))
+                                LimitCurr[i] = real_data.curr[i];
+                        }
+                        else
+                        {
+                            m_sTempCurr[i] = real_data.curr[i]; // 0이면 0 그대로 표시
+                        }
+                    }
+                    else // 상태가 -2 이하(종료 등)일 때
+                    {
+                        m_sTempVlot[i] = real_data.final_volt[i];
                         m_sTempCurr[i] = real_data.final_curr[i];
-                     }
+                    }
                  }
-
                  if(testTime->Caption.ToIntDef(0) > 15)
-					GetCodeColor(panel[i], i);
+					GetCodeColor2(panel[i], i);
 			}
 
 			if(MeasureInfoForm->Visible && MeasureInfoForm->stage == this->Tag)
@@ -1177,8 +1201,10 @@ void __fastcall TTotalForm::DisplayChannelInfo()
 					}
 				}
 
-                MeasureInfoForm->pvolt[i]->Caption = m_sTempVlot[i];
-				MeasureInfoForm->pcurr[i]->Caption = m_sTempCurr[i];
+                if(tray.cell[i] == 1){
+                    MeasureInfoForm->pvolt[i]->Caption = m_sTempVlot[i];
+                    MeasureInfoForm->pcurr[i]->Caption = m_sTempCurr[i];
+                }
 
                 //* Graph Start
                 MeasureInfoForm->chartVoltage->Series[0]->YValue[i + 1] = BaseForm->StringToDouble(m_sTempVlot[i], 0);
@@ -1215,43 +1241,37 @@ AnsiString __fastcall TTotalForm::GetCodeColor(TPanel *pnl, int index)
 AnsiString __fastcall TTotalForm::GetCodeColor2(TPanel *pnl, int index)
 {
 	TColor clr = clBlack;
-	AnsiString str;
-	if(real_data.status[index] >= 0){
-//		int code = StrToInt(real_data.status_code[index]);
-		int code = BaseForm->StringToInt(real_data.status[index], 1);
+    AnsiString str;
 
-		switch(code){
-			case chstNone:
-				if(tray.cell[index] == 0) clr = cl_no->Color;
-				else clr = cl_error->Color;
-				break;
-			case chstRunning:		// 충전 Step
-				//if(tray.cell[index] == 0 && m_sTempVlot[index].ToDouble() > 500 && MeasureInfoForm->n_bManualStart == false)
-                if(tray.cell[index] == 0 && BaseForm->StringToDouble(m_sTempVlot[index], 0) > 500 && MeasureInfoForm->n_bManualStart == false)
-				{
-					clr = cl_outflow->Color;		// 유출
-				}
-				else if(tray.cell[index] == 0) clr = cl_no->Color;
-				else clr = cl_charge->Color;
-				break;
-			case chstFail:
-				if(tray.cell[index] == 0) clr = cl_no->Color;
-				else clr = cl_error->Color;
-				break;
-			case chstAbort:
-				if(tray.cell[index] == 0) clr = cl_no->Color;
-				else clr = cl_error->Color;
-				break;
-			case chstOK:
-				clr = cl_end->Color;
-				break;
-			default:
-				break;
-		}
+    // 1. 유출 체크 (셀이 없는데 전압이 높은 경우)
+    // 실시간 전압이 튈 수 있으므로 이 부분도 final_volt를 사용하는 것이 안정적입니다.
+    double f_volt = BaseForm->StringToDouble(real_data.final_volt[index], 0);
+    double f_curr = BaseForm->StringToDouble(real_data.final_curr[index], 0);
 
-		if(clr != clBlack) pnl->Color = clr;
-	}
-	return str;
+    if(tray.cell[index] == 0 && f_volt > 500 && MeasureInfoForm->n_bManualStart == false)
+    {
+        clr = cl_outflow->Color;        // 유출
+    }
+    else if(tray.cell[index] == 0)
+    {
+        clr = cl_no->Color;             // 셀 없음
+    }
+    else
+    {
+        if(real_data.status[index] < -2 || (fabs(f_curr) < 100 && f_volt < 500))
+        {
+            clr = cl_error->Color;      // 불량 (빨간색 등)
+        }
+        else
+        {
+            clr = cl_charge->Color;     // 정상 충전 중/완료 (하늘색/녹색 등)
+        }
+    }
+
+    if(clr != clBlack)
+        pnl->Color = clr;
+
+    return str;
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::SetTrayID(AnsiString str_id)
@@ -1997,16 +2017,13 @@ void __fastcall TTotalForm::SetFinalData()
         tempVolt = BaseForm->StringToDouble(real_data.volt[nIndex], 0);
         tempCurr = BaseForm->StringToDouble(real_data.curr[nIndex], 0);
 
-		if(/*real_data.status[nIndex] == 2 || */(real_data.status[nIndex] > -2 && tempVolt > 100)){
+		if((real_data.status[nIndex] > -2 && tempVolt > 100)){
 			real_data.final_status[nIndex] = real_data.status[nIndex];
             real_data.final_volt[nIndex] = real_data.volt[nIndex];
             real_data.final_curr[nIndex] = real_data.curr[nIndex];
             real_data.final_capa[nIndex] = real_data.capa[nIndex];
 		}
-        else if(real_data.status[nIndex] > -2 && tempVolt <= 100){
-            real_data.final_curr[nIndex] = "0";
-            real_data.final_volt[nIndex] = "0";
-        }
+
 		//* -2는 무시, -2는 done 상태로 전압, 전류값이 점점 줄어든다.
         //* => 이 값은 final 데이터로 처리하면 안됨.
 		else if(real_data.status[nIndex] < -2){
