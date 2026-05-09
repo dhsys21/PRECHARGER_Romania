@@ -1112,28 +1112,31 @@ void __fastcall TTotalForm::DisplayChannelInfo()
 					m_sTempCurr[i] = "0.0";
                     m_sTempVlot[i] = "0.0";
                 }
+                else{
+                    if(real_data.final_volt[i] != "") m_sTempVlot[i] = real_data.final_volt[i];
+					if(real_data.final_curr[i] != "") m_sTempCurr[i] = real_data.final_curr[i];
+                }
 			}
 			else if(tray.ams)
 			{
-				 if(m_sTempCurr[i] != "Cell"
-                 	&& (real_data.status[i] > -2 && BaseForm->StringToDouble(real_data.volt[i],0) > 100)){
-					m_sTempVlot[i] = real_data.volt[i];
-					m_sTempCurr[i] = real_data.curr[i];
+				 if(m_sTempCurr[i] != "Cell"){
+                     m_sTempVlot[i] = real_data.final_volt[i];
+                     if(real_data.status[i] > -2 && BaseForm->StringToDouble(real_data.volt[i],0) > 100){
+                        //m_sTempVlot[i] = real_data.volt[i];
+                        m_sTempCurr[i] = real_data.curr[i];
 
-					if(LimitVolt[i].ToDouble() < real_data.volt[i].ToDouble())
-						LimitVolt[i] = real_data.volt[i];
+                        if(LimitVolt[i].ToDouble() < real_data.volt[i].ToDouble())
+                            LimitVolt[i] = real_data.volt[i];
 
-					if(LimitCurr[i].ToDouble() < real_data.curr[i].ToDouble())
-						LimitCurr[i] = real_data.curr[i];
-
-					//GetCodeColor(panel[i], i);
-				 }
-				 else{
-                    m_sTempVlot[i] = real_data.volt[i];
-					m_sTempCurr[i] = real_data.curr[i];
-
-					//GetCodeColor(panel[i], i);
-				 }
+                        if(LimitCurr[i].ToDouble() < real_data.curr[i].ToDouble())
+                            LimitCurr[i] = real_data.curr[i];
+                     }
+                     else{
+                        //m_sTempVlot[i] = real_data.volt[i];
+                        //m_sTempCurr[i] = real_data.curr[i];
+                        m_sTempCurr[i] = real_data.final_curr[i];
+                     }
+                 }
 
                  if(testTime->Caption.ToIntDef(0) > 15)
 					GetCodeColor(panel[i], i);
@@ -1174,13 +1177,8 @@ void __fastcall TTotalForm::DisplayChannelInfo()
 					}
 				}
 
-                if(tray.ams){
-					MeasureInfoForm->pvolt[i]->Caption = m_sTempVlot[i];
-					MeasureInfoForm->pcurr[i]->Caption = m_sTempCurr[i];
-                } else if(tray.amf){
-                    MeasureInfoForm->pvolt[i]->Caption = real_data.final_volt[i];
-					MeasureInfoForm->pcurr[i]->Caption = real_data.final_curr[i];
-                }
+                MeasureInfoForm->pvolt[i]->Caption = m_sTempVlot[i];
+				MeasureInfoForm->pcurr[i]->Caption = m_sTempCurr[i];
 
                 //* Graph Start
                 MeasureInfoForm->chartVoltage->Series[0]->YValue[i + 1] = BaseForm->StringToDouble(m_sTempVlot[i], 0);

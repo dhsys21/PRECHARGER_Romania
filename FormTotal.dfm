@@ -1418,8 +1418,8 @@ object TotalForm: TTotalForm
     object StatusImage: TImage
       Left = 2
       Top = 23
-      Width = 446
-      Height = 279
+      Width = 346
+      Height = 265
       Align = alClient
       AutoSize = True
       Center = True
@@ -2365,8 +2365,6 @@ object TotalForm: TTotalForm
         050068E8FF00F214B3FF0079BFA57E91E13FFC97FC2BFF00632C3FFE9E91E6E6
         BFEE388FF09EFC9F757FDD5FE42BFD9EA7FC3A7FE087FE928FCA1EEFD5FE67FF
         D9}
-      ExplicitWidth = 346
-      ExplicitHeight = 265
     end
   end
   object GrpError: TGroupBox
@@ -5001,8 +4999,8 @@ object TotalForm: TTotalForm
     object Image5: TImage
       Left = 4
       Top = 25
-      Width = 442
-      Height = 275
+      Width = 346
+      Height = 265
       Align = alClient
       AutoSize = True
       Center = True
@@ -5796,8 +5794,6 @@ object TotalForm: TTotalForm
         00500140050014005001401EB9F023FE4ABF833FEC336BFF00A11AF9ECFBFDC7
         30FF00B069FF00E9076659FEFD1F589FD185BFFC7BC1FF005C62FF00D016BF99
         E3F0AF45F91FAAC7E18FA2FC8FFFD9}
-      ExplicitWidth = 346
-      ExplicitHeight = 265
     end
     object localTest: TAdvSmoothButton
       Left = 248
@@ -7128,8 +7124,8 @@ object TotalForm: TTotalForm
       object Label_Msg: TLabel
         Left = 0
         Top = 3
-        Width = 396
-        Height = 47
+        Width = 50
+        Height = 16
         Align = alClient
         Alignment = taCenter
         Caption = 'Message'
@@ -7140,8 +7136,6 @@ object TotalForm: TTotalForm
         Font.Style = []
         ParentFont = False
         Layout = tlCenter
-        ExplicitWidth = 50
-        ExplicitHeight = 16
       end
     end
   end
