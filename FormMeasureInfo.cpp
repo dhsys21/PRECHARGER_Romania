@@ -592,7 +592,7 @@ void __fastcall TMeasureInfoForm::Timer_SetStepTimer(TObject *Sender)
 		    bErrorFlag = false;
             LAST_STEP_BEFORE_99 = 1;
 
-            BaseForm->nForm[stage]->CmdSetStep();
+            BaseForm->nForm[stage]->CmdSetStep2();
             nStep = 99;
             nSetCount = 0;
         	break;
@@ -614,12 +614,14 @@ void __fastcall TMeasureInfoForm::Timer_SetStepTimer(TObject *Sender)
 
         case 3:
             Timer_SetStep->Enabled = false;
+            BaseForm->nForm[stage]->ConfigBtn1->Enabled = true;
             nStep = 0;
             break;
 
         case 4: // [에러 표시 단계]
             Timer_SetStep->Enabled = false;
-            Form_Error->DisplayErrorMessage(this->Tag, nResetErr);
+            BaseForm->nForm[stage]->ConfigBtn1->Enabled = true;
+            Form_Error->DisplayErrorMessage(this->Tag, nSetErr);
             nStep = 0;
             break;
 

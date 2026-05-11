@@ -95,6 +95,14 @@ void __fastcall TForm_Error::DisplayErrorMessage(int nStage, int nError)
             btnTrayOut->Visible = false;
             btnRestart->Visible = false;
             btnOK->Visible = true;
+        } else if(nError == nSetErr){
+            title = "STAGE #" + IntToStr(nStage + 1) + " SETTING ERROR";
+            msg1 = "SET command has fail.";
+            msg2 = "Please check it and run setting again.";
+
+            btnTrayOut->Visible = false;
+            btnRestart->Visible = false;
+            btnOK->Visible = true;
         }
 
 		Label_Title->Caption = title;

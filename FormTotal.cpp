@@ -2092,11 +2092,16 @@ void __fastcall TTotalForm::SetEquipStatus(AnsiString eqStatus, int stageno)
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::ConfigBtn1Click(TObject *Sender)
 {
-    if(MessageBox(Handle, L"Do you want to set PRECHARGER?", L"SET", MB_YESNO|MB_ICONQUESTION) == ID_YES){
-        PreChargeSet(this->Tag);
+    if(BaseForm->pnlBT[this->Tag * 2]->Fill->Color == BaseForm->pon->Color
+        && BaseForm->pnlBT[this->Tag * 2 + 1]->Fill->Color == BaseForm->pon->Color){
+        if(MessageBox(Handle, L"Do you want to set PRECHARGER?", L"SET", MB_YESNO|MB_ICONQUESTION) == ID_YES){
+            ConfigBtn1->Enabled = false;
+            PreChargeSet(this->Tag);
 
-        MeasureInfoForm->initChart(config.volt, config.curr);
+            MeasureInfoForm->initChart(config.volt, config.curr);
+        }
     }
+    else ShowMessage("PreCharger is not connected. Please check it");
 }
 //---------------------------------------------------------------------------
 AnsiString __fastcall TTotalForm::convertCondition(AnsiString condition)
@@ -2153,7 +2158,10 @@ void _fastcall TTotalForm::PreChargeSet(int stageno)
             MeasureInfoForm->SetStep(stageno);
 //		}
 	}
-	else ShowMessage("You can't set up while charging.");
+	else {
+        ConfigBtn1->Enabled = true;
+    	ShowMessage("You can't set up while charging.");
+    }
 }
 //---------------------------------------------------------------------------
 void __fastcall TTotalForm::SetSystemInfo()

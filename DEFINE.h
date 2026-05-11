@@ -124,6 +124,7 @@ const int nNgErr    	= 0;
 const int nRebootErr  	= 1;
 const int nResetErr     = 2;
 const int nEnaErr       = 3;
+const int nSetErr       = 4;
 
 typedef struct{
     bool rst;
